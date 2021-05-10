@@ -21,7 +21,8 @@ namespace Ex03.GarageLogic
         {
             if (i_AddingHoursToBattery + m_MaxTimebattery > m_MaxTimebattery)
             {
-                //trow
+                Exception ex = new Exception();
+                throw new ValueOutOfRangeException(ex, m_MaxTimebattery);
             }
             m_TimeLeftbattery += i_AddingHoursToBattery;
         }

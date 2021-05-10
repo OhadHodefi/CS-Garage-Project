@@ -43,7 +43,8 @@ namespace Ex03.GarageLogic
             {   
                 if(value > 100 || value < 0)
                 {
-                    // throw exception
+                    Exception ex = new Exception();
+                    throw new ValueOutOfRangeException(ex, 0 ,100);
                 }
 
                 m_PercentageEnergyRemaining = value;

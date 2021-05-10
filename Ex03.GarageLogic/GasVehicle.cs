@@ -45,11 +45,12 @@ namespace Ex03.GarageLogic
         {
             if (i_AddingGasLiters + m_CurrentAmountGas > m_MaxAmountGas)
             {
-                //trow
+                Exception ex = new Exception();
+                throw new ValueOutOfRangeException(ex, m_MaxAmountGas);
             }
             if (!m_GasType.Equals(i_GasType))
             {
-                //trow
+                throw new ArgumentException(string.Format("Incorrect gas type. The correct gas type is: {0} ", m_GasType));
             }
             m_CurrentAmountGas += i_AddingGasLiters;
         }
