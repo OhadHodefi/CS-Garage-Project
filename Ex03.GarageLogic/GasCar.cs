@@ -6,32 +6,29 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    class GasCar : GasVehicle
+    public class GasCar : Car
     {
-        public enum eColor { Red, Silver, White, Black }
-
-        private eColor m_Color;
-        private int m_DorsNumber;
-
-        public GasCar(eColor i_Color, int i_DorsNumber, eGasTypes i_GasType, float i_CurrentAmountGas, float i_MaxAmountGas, string i_ModelName, string i_LicenceNumber, int i_WheelsNumber)
-            : base(i_GasType, i_CurrentAmountGas, i_MaxAmountGas, i_ModelName, i_LicenceNumber, i_WheelsNumber)
+        private GasEngine m_Engine;
+        public GasCar(eColor i_Color, GasEngine.eFuelTypes i_FuelType, int i_DoorsNumber, float i_FuelCapacity, string i_ModelName, string i_LicenceNumber)
+            : base(i_Color, i_DoorsNumber, i_ModelName, i_LicenceNumber, 0)
         {
-            m_Color = i_Color;
-            m_DorsNumber = i_DorsNumber;
+            m_Engine = new GasEngine(i_FuelType, i_FuelCapacity);
         }
 
-        public eColor Color
+        public GasEngine.eFuelTypes FuelType
         {
-            get { return m_Color; }
-            set
-            {
-                m_Color = value;
-            }
+            get { return m_Engine.FuelType; }
         }
 
-        public int DorsNum
+        public float CurrentFuel
         {
-            get { return m_DorsNumber; }
+            get { return m_Engine.CurrentCapacity; }
+        }
+
+        public void Fuel(GasEngine.eFuelTypes i_FuelType, float i_ToFuel)
+        {
+            m_Engine.Fuel(i_FuelType, i_ToFuel);
+            this.EnergyRemaining = (m_Engine.CurrentCapacity / m_Engine.MaxCapacity) * 100;
         }
     }
 }

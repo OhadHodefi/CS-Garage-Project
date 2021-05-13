@@ -6,32 +6,33 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    class ElectricCar:ElectricVehicle
+    public class ElectricCar : Car
     {
-        public enum eColor { Red, Silver, White, Black }
+        private ElectricEngine m_Engine;
 
-        private eColor m_Color;
-        private int m_DorsNumber;
-
-        public ElectricCar(eColor i_Color, int i_DorsNumber, float i_TimeLeftbattery, float i_MaxTimebattery, string i_ModelName, string i_LicenceNumber, float i_PercentageEnergyRemaining, int i_WheelsNumber)
-            : base(i_TimeLeftbattery, i_MaxTimebattery, i_ModelName, i_LicenceNumber, i_PercentageEnergyRemaining, i_WheelsNumber)
+        public ElectricCar(eColor i_Color, int i_DoorsNumber, float i_MaxTimebattery, string i_ModelName, string i_LicenceNumber)
+            : base(i_Color, i_DoorsNumber, i_ModelName, i_LicenceNumber, 0)
         {
-            m_Color = i_Color;
-            m_DorsNumber = i_DorsNumber;
+            // We assume a new car won't have a charged battery
+            m_Engine = new ElectricEngine(i_MaxTimebattery, 0);
         }
 
-        public eColor Color
+        public float MinutesLeftInEngine
         {
-            get { return m_Color; }
-            set
-            {
-                m_Color = value;
-            }
+            get { return m_Engine.MinutesLeft; }
         }
 
-        public int DorsNum
+        public float HoursLeftInEngine
         {
-            get { return m_DorsNumber; }
+            get { return m_Engine.HoursLeft; }
         }
+
+        public void Charge(float i_TimeToCharge)
+        {
+            m_Engine.Charge(i_TimeToCharge);
+            this.EnergyRemaining = (MinutesLeftInEngine / m_Engine.MaxCapacity) * 100;
+        }
+        
+
     }
 }

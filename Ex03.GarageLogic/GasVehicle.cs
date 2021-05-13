@@ -8,7 +8,6 @@ namespace Ex03.GarageLogic
 {
     abstract class GasVehicle : Vehicle
     {
-        public enum eGasTypes { Soler, Octan95, Octan96, Octan98 }
 
         private readonly eGasTypes m_GasType;
         private float m_CurrentAmountGas;
@@ -34,7 +33,8 @@ namespace Ex03.GarageLogic
             {
                 if (value + m_CurrentAmountGas > m_MaxAmountGas)
                 {
-                    // throw self made exception
+                    Exception ex = new Exception();
+                    throw new ValueOutOfRangeException(ex, m_MaxAmountGas);
                 }
 
                 m_CurrentAmountGas += value;

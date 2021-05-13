@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    class Wheel
+    public class Wheel
     {
         private string m_ManufacturerName;
         private float m_CurrentAirPressure;
@@ -17,6 +17,11 @@ namespace Ex03.GarageLogic
             m_ManufacturerName = i_ManufacturerName;
             m_MaxAirPressure = i_MaxPressure;
             m_CurrentAirPressure = 0;
+        }
+
+        public string ManufacturerName
+        {
+            get { return m_ManufacturerName; }
         }
 
         public float Pressure
@@ -31,10 +36,9 @@ namespace Ex03.GarageLogic
 
         public void Inflate(float i_AirToAdd)
         {
-            if (m_CurrentAirPressure + i_AirToAdd > m_MaxAirPressure)
+            if (m_CurrentAirPressure + i_AirToAdd > m_MaxAirPressure || i_AirToAdd < 0)
             {
-                Exception ex = new Exception();
-                throw new ValueOutOfRangeException(ex, m_MaxAirPressure);
+                throw new ValueOutOfRangeException(0, m_MaxAirPressure);
             }
 
             m_CurrentAirPressure += i_AirToAdd;

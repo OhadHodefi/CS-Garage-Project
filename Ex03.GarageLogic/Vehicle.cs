@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    abstract class Vehicle
+    public abstract class Vehicle
     {
         private string m_ModelName;
         private string m_LicenceNumber;
@@ -43,8 +43,7 @@ namespace Ex03.GarageLogic
             {   
                 if(value > 100 || value < 0)
                 {
-                    Exception ex = new Exception();
-                    throw new ValueOutOfRangeException(ex, 0 ,100);
+                    throw new ValueOutOfRangeException(0 ,100);
                 }
 
                 m_PercentageEnergyRemaining = value;
