@@ -6,28 +6,39 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    class ElectricMotorcycle : Car
+    public class ElectricMotorcycle : Motorcycle
     {
+        private ElectricEngine m_Engine;
 
-        public enum LicenseTypes { A, B1, AA, BB }
-
-        private LicenseTypes m_LicenseType;
-        private int m_EngineCapacity;
-
-        public ElectricMotorcycle(LicenseTypes i_LicenseType, int i_EngineCapacity, float i_TimeLeftbattery, float i_MaxTimebattery, string i_ModelName, string i_LicenceNumber, float i_PercentageEnergyRemaining, int i_WheelsNumber)
-            : base(i_TimeLeftbattery, i_MaxTimebattery, i_ModelName, i_LicenceNumber, i_PercentageEnergyRemaining, i_WheelsNumber)
+        public ElectricMotorcycle(ElectricEngine i_Engine, LicenseTypes i_LicenseType, int i_EngineCapacity, string i_ModelName, string i_LicenceNumber, float i_PercentageEnergyRemaining, int i_WheelsNumber)
+            : base(i_LicenseType, i_EngineCapacity, i_ModelName, i_LicenceNumber, i_PercentageEnergyRemaining, i_WheelsNumber)
         {
-            m_LicenseType = i_LicenseType;
-            m_EngineCapacity = i_EngineCapacity;
-        }
-        public LicenseTypes LicenseType
-        {
-            get { return m_LicenseType; }
+            m_Engine = i_Engine;
         }
 
-        public int EngineCapacity
+        public float EngineCapacity
         {
-            get { return m_EngineCapacity; }
+            get { return m_Engine.MaxCapacity; }
+        }
+        public float CurrentCapacity
+        {
+            get { return m_Engine.CurrentCapacity; }
+            set { m_Engine.CurrentCapacity = value; }
+        }
+
+        public float MinutesLeftInEngine
+        {
+            get { return m_Engine.MinutesLeft; }
+        }
+
+        public float HoursLeftInEngine
+        {
+            get { return m_Engine.HoursLeft; }
+        }
+        public void Charge(float i_TimeToCharge)
+        {
+            m_Engine.Charge(i_TimeToCharge);
+            this.EnergyRemaining = (MinutesLeftInEngine / m_Engine.MaxCapacity) * 100;
         }
     }
 }

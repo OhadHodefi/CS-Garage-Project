@@ -6,28 +6,36 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    class GasMotorcycle : GasVehicle
+    public class GasMotorcycle : Motorcycle
     {
-        public enum LicenseTypes { A, B1, AA, BB }
-        
-        private LicenseTypes m_LicenseType;
-        private int m_EngineCapacity;
+        private GasEngine m_Engine;
 
-        public GasMotorcycle(LicenseTypes i_LicenseType, int i_EngineCapacity, eGasTypes i_GasType, float i_CurrentAmountGas, float i_MaxAmountGas, string i_ModelName, string i_LicenceNumber, int i_WheelsNumber)
-            : base(i_GasType, i_CurrentAmountGas, i_MaxAmountGas, i_ModelName, i_LicenceNumber, i_WheelsNumber)
+        public GasMotorcycle(GasEngine i_Engine, LicenseTypes i_LicenseType, int i_EngineCapacity, string i_ModelName, string i_LicenceNumber, float i_PercentageEnergyRemaining, int i_WheelsNumber)
+        : base(i_LicenseType, i_EngineCapacity, i_ModelName, i_LicenceNumber, i_PercentageEnergyRemaining, i_WheelsNumber)
         {
-            m_LicenseType = i_LicenseType;
-            m_EngineCapacity = i_EngineCapacity;
+            m_Engine = i_Engine;
         }
 
-        public LicenseTypes LicenseType
+
+        internal GasEngine.eFuelTypes FuelType
         {
-            get { return m_LicenseType; }
+            get { return m_Engine.FuelType; }
         }
 
-        public int EngineCapacity
+        internal void Fuel(GasEngine.eFuelTypes i_FuelType, float i_ToFuel)
         {
-            get { return m_EngineCapacity; }
+            m_Engine.Fuel(i_FuelType, i_ToFuel);
+        }
+
+        public float MaxCapacity
+        {
+            get { return m_Engine.MaxCapacity; }
+        }
+
+        public float CurrentCapacity
+        {
+            get { return m_Engine.CurrentCapacity; }
+            set { m_Engine.CurrentCapacity = value; }
         }
     }
 }

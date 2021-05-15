@@ -10,11 +10,10 @@ namespace Ex03.GarageLogic
     {
         private ElectricEngine m_Engine;
 
-        public ElectricCar(eColor i_Color, int i_DoorsNumber, float i_MaxTimebattery, string i_ModelName, string i_LicenceNumber)
+        public ElectricCar(ElectricEngine i_Engine, eColor i_Color, int i_DoorsNumber, float i_MaxTimebattery, string i_ModelName, string i_LicenceNumber)
             : base(i_Color, i_DoorsNumber, i_ModelName, i_LicenceNumber, 0)
         {
-            // We assume a new car won't have a charged battery
-            m_Engine = new ElectricEngine(i_MaxTimebattery, 0);
+            m_Engine = i_Engine;
         }
 
         public float MinutesLeftInEngine
