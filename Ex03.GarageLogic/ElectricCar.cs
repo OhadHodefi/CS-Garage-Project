@@ -8,17 +8,29 @@ namespace Ex03.GarageLogic
 {
     public class ElectricCar : Car
     {
+        private const float k_MaxBatteryCapacity = 192f; // 192 minutes -> 3.2 hours
+        private const float k_MaxWheelPressure = 32f;
         private ElectricEngine m_Engine;
 
-        public ElectricCar(ElectricEngine i_Engine, eColor i_Color, int i_DoorsNumber, float i_MaxTimebattery, string i_ModelName, string i_LicenceNumber)
-            : base(i_Color, i_DoorsNumber, i_ModelName, i_LicenceNumber, 0)
+        public ElectricCar(eColor i_Color,
+                           eDoors i_DoorsNumber,
+                           string i_ModelName,
+                           string i_LicenceNumber,
+                           string i_WheelManufacturer)
+            : base(i_Color,
+                   i_DoorsNumber,
+                   i_ModelName,
+                   i_LicenceNumber,
+                   0,
+                   k_MaxWheelPressure,
+                   i_WheelManufacturer)
         {
-            m_Engine = i_Engine;
+            m_Engine = new ElectricEngine(k_MaxBatteryCapacity, 0);
         }
 
-        public float MinutesLeftInEngine
+        public float EngineCapacity
         {
-            get { return m_Engine.MinutesLeft; }
+            get { return m_Engine.MaxEngineHours; }
         }
 
         public float HoursLeftInEngine
@@ -29,9 +41,7 @@ namespace Ex03.GarageLogic
         public void Charge(float i_TimeToCharge)
         {
             m_Engine.Charge(i_TimeToCharge);
-            this.EnergyRemaining = (MinutesLeftInEngine / m_Engine.MaxCapacity) * 100;
+            this.EnergyRemaining = (m_Engine.CurrentCapacity / m_Engine.MaxCapacity) * 100;
         }
-        
-
     }
 }

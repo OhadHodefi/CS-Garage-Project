@@ -8,11 +8,23 @@ namespace Ex03.GarageLogic
 {
     public class GasCar : Car
     {
+        private const float k_MaxEngineCapacity = 45f; // 45 litres 
+        private const float k_MaxWheelPressure = 30f;
         private GasEngine m_Engine;
-        public GasCar(GasEngine i_Engine, eColor i_Color, GasEngine.eFuelTypes i_FuelType, int i_DoorsNumber, float i_FuelCapacity, string i_ModelName, string i_LicenceNumber)
-            : base(i_Color, i_DoorsNumber, i_ModelName, i_LicenceNumber, 0)
+        public GasCar(eColor i_Color,
+                      eDoors i_DoorsNumber,
+                      string i_ModelName,
+                      string i_LicenceNumber,
+                      string i_WheelManufacturer)
+            : base(i_Color,
+                   i_DoorsNumber,
+                   i_ModelName,
+                   i_LicenceNumber,
+                   0,
+                   k_MaxWheelPressure,
+                   i_WheelManufacturer)
         {
-            m_Engine = i_Engine;
+            m_Engine = new GasEngine(GasEngine.eFuelTypes.Octan95, k_MaxEngineCapacity);
         }
 
         public GasEngine.eFuelTypes FuelType
@@ -23,6 +35,11 @@ namespace Ex03.GarageLogic
         public float CurrentFuel
         {
             get { return m_Engine.CurrentCapacity; }
+        }
+
+        public float MaxFuel
+        {
+            get { return m_Engine.MaxCapacity; }
         }
 
         public void Fuel(GasEngine.eFuelTypes i_FuelType, float i_ToFuel)

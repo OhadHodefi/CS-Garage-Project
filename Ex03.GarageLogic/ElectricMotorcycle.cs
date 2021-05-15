@@ -8,37 +8,39 @@ namespace Ex03.GarageLogic
 {
     public class ElectricMotorcycle : Motorcycle
     {
+        private const float k_MaxBatteryCapacity = 108f; // 108 minutes -> 1.8 hours
         private ElectricEngine m_Engine;
 
-        public ElectricMotorcycle(ElectricEngine i_Engine, LicenseTypes i_LicenseType, int i_EngineCapacity, string i_ModelName, string i_LicenceNumber, float i_PercentageEnergyRemaining, int i_WheelsNumber)
-            : base(i_LicenseType, i_EngineCapacity, i_ModelName, i_LicenceNumber, i_PercentageEnergyRemaining, i_WheelsNumber)
+        public ElectricMotorcycle(eLicenseTypes i_LicenseType,
+                                  int i_CubicCapacity,
+                                  string i_ModelName,
+                                  string i_LicenceNumber,
+                                  float i_PercentageEnergyRemaining,
+                                  string i_WheelManufacturer)
+            : base(i_LicenseType,
+                   i_CubicCapacity,
+                   i_ModelName,
+                   i_LicenceNumber,
+                   i_PercentageEnergyRemaining,
+                   i_WheelManufacturer)
         {
-            m_Engine = i_Engine;
+            m_Engine = new ElectricEngine(k_MaxBatteryCapacity, 0);
         }
 
         public float EngineCapacity
         {
-            get { return m_Engine.MaxCapacity; }
-        }
-        public float CurrentCapacity
-        {
-            get { return m_Engine.CurrentCapacity; }
-            set { m_Engine.CurrentCapacity = value; }
-        }
-
-        public float MinutesLeftInEngine
-        {
-            get { return m_Engine.MinutesLeft; }
+            get { return m_Engine.MaxEngineHours; }
         }
 
         public float HoursLeftInEngine
         {
             get { return m_Engine.HoursLeft; }
         }
+
         public void Charge(float i_TimeToCharge)
         {
             m_Engine.Charge(i_TimeToCharge);
-            this.EnergyRemaining = (MinutesLeftInEngine / m_Engine.MaxCapacity) * 100;
+            this.EnergyRemaining = (m_Engine.CurrentCapacity / m_Engine.MaxCapacity) * 100;
         }
     }
 }
