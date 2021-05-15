@@ -11,17 +11,11 @@ namespace Ex03.GarageLogic
         private const float k_MaxEngineCapacity = 6f;
         private GasEngine m_Engine;
 
-        public GasMotorcycle(eLicenseTypes i_LicenseType,
-                             int i_CubicCapacity,
-                             string i_ModelName,
+        public GasMotorcycle(string i_ModelName,
                              string i_LicenceNumber,
-                             float i_PercentageEnergyRemaining,
                              string i_WheelManufacturer)
-        : base(i_LicenseType,
-               i_CubicCapacity,
-               i_ModelName,
+        : base(i_ModelName,
                i_LicenceNumber,
-               i_PercentageEnergyRemaining,
                i_WheelManufacturer)
         {
             m_Engine = new GasEngine(GasEngine.eFuelTypes.Octan98, k_MaxEngineCapacity);
@@ -43,9 +37,16 @@ namespace Ex03.GarageLogic
             get { return m_Engine.CurrentCapacity; }
         }
 
-        internal void Fuel(GasEngine.eFuelTypes i_FuelType, float i_ToFuel)
+        public override Engine Engine
         {
-            m_Engine.Fuel(i_FuelType, i_ToFuel);
+            get { return m_Engine; }
+        }
+
+        public override string ToString()
+        {
+            StringBuilder resString = new StringBuilder(base.ToString());
+            resString.Append(m_Engine.ToString());
+            return resString.ToString();
         }
     }
 }

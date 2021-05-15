@@ -6,31 +6,24 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    class Truck : Vehicle
+    public class Truck : Vehicle
     {
         private const short k_WheelNumber = 16;
         private const float k_WheelPressure = 26f;
         private const float k_MaxEngineCapacity = 120f;
         private bool m_IsTransportHazardousMaterials;
-        private readonly float m_MaxCarryingWeight;
+        private float m_MaxCarryingWeight;
         private GasEngine m_Engine;
 
-        public Truck(bool i_IsTransportHazardousMaterials,
-                     float i_MaxCarryingWeight,
-                     float i_CurrentAmountGas,
-                     float i_MaxAmountGas,
-                     string i_ModelName,
+        public Truck(string i_ModelName,
                      string i_LicenceNumber,
                      string i_WheelManufacturer)
             : base(i_ModelName,
                    i_LicenceNumber,
-                   0,
                    k_WheelNumber,
                    k_WheelPressure,
                    i_WheelManufacturer)
         {
-            m_IsTransportHazardousMaterials = i_IsTransportHazardousMaterials;
-            m_MaxCarryingWeight = i_MaxAmountGas;
             m_Engine = new GasEngine(GasEngine.eFuelTypes.Soler, k_MaxEngineCapacity);
         }
 
@@ -48,6 +41,7 @@ namespace Ex03.GarageLogic
         public float MaxCarryingWeight
         {
             get { return m_MaxCarryingWeight; }
+            set { m_MaxCarryingWeight = value; }
         }
 
         public float CurrentFuel
@@ -60,12 +54,40 @@ namespace Ex03.GarageLogic
             get { return m_Engine.MaxCapacity; }
         }
 
-        public void Fuel(GasEngine.eFuelTypes i_FuelType, float i_ToFuel)
+        public override Engine Engine
         {
-            m_Engine.Fuel(i_FuelType, i_ToFuel);
-            this.EnergyRemaining = (m_Engine.CurrentCapacity / m_Engine.MaxCapacity) * 100;
+            get { return m_Engine; }
         }
 
+        //        public override string GetParams()
+        //        {
+        //            StringBuilder paramStr = new StringBuilder();
+        //            paramStr.AppendFormat(@"Transporting hazardous materials?
+        //Y / N");
+        //            paramStr.AppendFormat(@"Maximum carrying weight (integer):
+        //");
+        //            return paramStr.ToString();
+        //        }
+
+        public override object[] GetParams()
+        {
+            Type[] types = { m_IsTransportHazardousMaterials.GetType(), m_MaxCarryingWeight.GetType() };
+            return types;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder resString = new StringBuilder(base.ToString());
+            resString.AppendFormat(@"No. of wheels - {0}
+Transporting hazardous materials  - {1}
+Maximum carrying weight - {2}
+",
+                      k_WheelNumber,
+                      m_IsTransportHazardousMaterials ? "Yes" : "No",
+                      m_MaxCarryingWeight);
+            resString.Append(m_Engine.ToString());
+            return resString.ToString();
+        }
     }
 }
 

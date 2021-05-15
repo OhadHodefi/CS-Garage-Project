@@ -22,18 +22,32 @@ namespace Ex03.GarageLogic
             get { return r_FuelType; }
         }
 
-        internal void Fuel(eFuelTypes i_FuelType, float i_ToFuel)
+        public void Fuel(eFuelTypes i_FuelType, float i_ToFuel, Vehicle i_Vehicle)
         {
             if(i_FuelType != r_FuelType)
             {
-                throw new ArgumentException("Mismatch in fuel type");
+                throw new ArgumentException(string.Format(@"Mismatch in fuel type. Type needed is {0}", r_FuelType));
             }    
-            if(this.CurrentCapacity + i_ToFuel > this.MaxCapacity || i_ToFuel < 0)
+
+            if(CurrentCapacity + i_ToFuel > MaxCapacity || i_ToFuel < 0)
             {
-                throw new ValueOutOfRangeException(0, this.MaxCapacity);
+                throw new ValueOutOfRangeException(0, MaxCapacity - CurrentCapacity, "Gas Engine");
             }
 
-            this.CurrentCapacity += i_ToFuel;
+            CurrentCapacity += i_ToFuel;
+            i_Vehicle.EnergyRemaining = this.Percentage;
+        }
+
+        public override string ToString()
+        {
+            return string.Format(@"Engine capacity - {0} litres
+Current fuel - {1} litres ({2}%)
+Fuel type - {3}
+",
+                      MaxCapacity,
+                      CurrentCapacity,
+                      Percentage,
+                      FuelType);
         }
     }
 }

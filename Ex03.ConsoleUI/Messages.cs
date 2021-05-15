@@ -48,31 +48,39 @@ Garage Manager 2021
 
         internal enum eInputQueries
         {
+            Request,
             VehicleInfo,
             State,
             LicenseNumber,
+            WheelManufacturer,
+            ModelName,
+            VehicleType,
             Energy,
             WheelPressure,
             PersonalInfo,
             Name,
             PhoneNumber,
             GasType,
-            GasAmount,
+            EnergyAmount,
             ChargeTime,
         }
 
         internal static readonly string[] k_InputMessages =
         {
+            @"Enter the {0} and then press 'enter': ",
             "vehicle details",
             "vehicle state",
             "vehicle's license number",
+            "wheels manufacturer name",
+            "vehicle's model name",
+            "Please choose the type of vehicle: ",
             "current amount of energy (gas/electricity left)",
             "current wheels pressure",
-            "personal info",
+            "personal information",
             "name",
             "phone number",
             "type of gas",
-            "amount to fill",
+            "current amount of energy (fuel/charge) left",
             "minutes to charge"
         };
     }

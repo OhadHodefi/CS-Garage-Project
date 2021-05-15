@@ -11,20 +11,14 @@ namespace Ex03.GarageLogic
         private const float k_MaxBatteryCapacity = 108f; // 108 minutes -> 1.8 hours
         private ElectricEngine m_Engine;
 
-        public ElectricMotorcycle(eLicenseTypes i_LicenseType,
-                                  int i_CubicCapacity,
-                                  string i_ModelName,
+        public ElectricMotorcycle(string i_ModelName,
                                   string i_LicenceNumber,
-                                  float i_PercentageEnergyRemaining,
                                   string i_WheelManufacturer)
-            : base(i_LicenseType,
-                   i_CubicCapacity,
-                   i_ModelName,
+            : base(i_ModelName,
                    i_LicenceNumber,
-                   i_PercentageEnergyRemaining,
                    i_WheelManufacturer)
         {
-            m_Engine = new ElectricEngine(k_MaxBatteryCapacity, 0);
+            m_Engine = new ElectricEngine(k_MaxBatteryCapacity);
         }
 
         public float EngineCapacity
@@ -37,10 +31,16 @@ namespace Ex03.GarageLogic
             get { return m_Engine.HoursLeft; }
         }
 
-        public void Charge(float i_TimeToCharge)
+        public override Engine Engine
         {
-            m_Engine.Charge(i_TimeToCharge);
-            this.EnergyRemaining = (m_Engine.CurrentCapacity / m_Engine.MaxCapacity) * 100;
+            get { return m_Engine; }
+        }
+
+        public override string ToString()
+        {
+            StringBuilder resString = new StringBuilder(base.ToString());
+            resString.Append(m_Engine.ToString());
+            return resString.ToString();
         }
     }
 }

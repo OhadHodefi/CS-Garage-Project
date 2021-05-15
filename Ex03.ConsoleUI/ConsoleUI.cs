@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Threading;
 
 namespace Ex03.ConsoleUI
 {
@@ -9,58 +10,91 @@ namespace Ex03.ConsoleUI
         {
             bool quitGarage = false;
             Messages.eMenuQueries userChoice;
+            GarageLogic.Garage garage = new GarageLogic.Garage();
 
             while (!quitGarage)
             {
-                ShowMenu();
-                int choice = int.Parse(Console.ReadLine());
-                userChoice = (Messages.eMenuQueries)choice;
-
-                switch (userChoice)
+                try
                 {
-                    case Messages.eMenuQueries.AddVehicle:
-                        {
-                            AddVehicle();
-                            break;
-                        }
+                    Console.Clear();
+                    ShowMenu();
+                    int choice = int.Parse(Console.ReadLine());
+                    userChoice = (Messages.eMenuQueries)choice;
+                    Console.Clear();
 
-                    case Messages.eMenuQueries.ViewLicenseNumbers:
-                        {
-                            break;
-                        }
+                    switch (userChoice)
+                    {
+                        case Messages.eMenuQueries.AddVehicle:
+                            {
+                                AddVehicle();
+                                break;
+                            }
 
-                    case Messages.eMenuQueries.ChangeState:
-                        {
-                            break;
-                        }
+                        case Messages.eMenuQueries.ViewLicenseNumbers:
+                            {
+                                ShowLicenseNumber();
+                                break;
+                            }
 
-                    case Messages.eMenuQueries.InflateTires:
-                        {
-                            break;
-                        }
+                        case Messages.eMenuQueries.ChangeState:
+                            {
+                                break;
+                            }
 
-                    case Messages.eMenuQueries.FuelVehicle:
-                        {
-                            break;
-                        }
+                        case Messages.eMenuQueries.InflateTires:
+                            {
+                                break;
+                            }
 
-                    case Messages.eMenuQueries.ChargeVehicle:
-                        {
-                            break;
-                        }
+                        case Messages.eMenuQueries.FuelVehicle:
+                            {
+                                break;
+                            }
 
-                    case Messages.eMenuQueries.ViewInfoByLicense:
-                        {
+                        case Messages.eMenuQueries.ChargeVehicle:
+                            {
+                                break;
+                            }
 
-                            break;
-                        }
+                        case Messages.eMenuQueries.ViewInfoByLicense:
+                            {
+                                ShowFullVehicleInfo(garage);
+                                break;
+                            }
 
-                    default:
-                        {
-                            quitGarage = true;
-                            Console.WriteLine("See you next time!");
-                            break;
-                        }
+                        default:
+                            {
+                                quitGarage = true;
+                                Console.WriteLine("See you next time!");
+                                Thread.Sleep(1500);
+                                break;
+                            }
+                    }
+                }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine(@"{0}
+{1}",
+                            ex.Source,
+                            ex.Message);
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(@"{0}
+{1}",
+                            ex.ParamName,
+                            ex.Message);
+                }
+                catch (GarageLogic.ValueOutOfRangeException ex)
+                {
+                    Console.WriteLine(@"{0}
+{1}",
+                            ex.Source,
+                            ex.Message);
+                }
+                finally
+                {   
+                    Thread.Sleep(3000);
                 }
             }
 
@@ -76,59 +110,116 @@ namespace Ex03.ConsoleUI
 
         public static void AddVehicle()
         {
-            int licenseNumber, gasAmount, wheelPSI;
-            string name, phoneNumber;
-            GetVehicleInfo(out licenseNumber, out gasAmount, out wheelPSI);
-            GetPersonalInfo(out name, out phoneNumber);
+            float energyAmount, wheelPSI;
+            string name, phoneNumber, licenseNumber, wheelManufacturer, modelName;
+            GetPersonalInfo(out name, out phoneNumber, out licenseNumber);
+            GarageLogic.VehicleFactory.eVehicleTypes vehicleType = GetVehicleType();
+            GetVehicleInfo(out energyAmount, out wheelPSI, out wheelManufacturer, out modelName);
+            GarageLogic.Vehicle vehicle= GarageLogic.VehicleFactory.MakeVehicle(vehicleType, licenseNumber, modelName, wheelManufacturer);
 
-            /* add vehicle to garage logic*/
         }
 
-        public static void GetVehicleInfo(out int io_LicenseNumber, out int io_GasAmount, out int io_WheelPSI)
+        public static void ShowInputMessage(StringBuilder i_Message, string i_FirstMessage, string i_SecondMessage)
         {
-            StringBuilder message = new StringBuilder(string.Format(
-                                        string.Format(@"We require your {0}.
-Please enter the {1}, {2} and {3}.",
-                                        Messages.k_InputMessages[(int)Messages.eInputQueries.VehicleInfo],
-                                        Messages.k_InputMessages[(int)Messages.eInputQueries.LicenseNumber],
-                                        Messages.k_InputMessages[(int)Messages.eInputQueries.GasAmount],
-                                        Messages.k_InputMessages[(int)Messages.eInputQueries.WheelPressure])));
-
-            Console.WriteLine(message);
-            message.Clear();
-            message.AppendFormat(@"Enter the {0} and press 'enter': ", Messages.k_InputMessages[(int)Messages.eInputQueries.LicenseNumber]);
-            Console.WriteLine(message);
-            io_LicenseNumber = int.Parse(Console.ReadLine());
-
-            message.Clear();
-            message.AppendFormat(@"Enter the {0} and press 'enter': ", Messages.k_InputMessages[(int)Messages.eInputQueries.GasAmount]);
-            Console.WriteLine(message);
-            io_GasAmount = int.Parse(Console.ReadLine());
-
-            message.Clear();
-            message.AppendFormat(@"Enter the {0} and press 'enter': ", Messages.k_InputMessages[(int)Messages.eInputQueries.WheelPressure]);
-            Console.WriteLine(message);
-            io_WheelPSI = int.Parse(Console.ReadLine());
+            i_Message.Clear();
+            i_Message.AppendFormat(i_FirstMessage, i_SecondMessage);
+            Console.WriteLine(i_Message);
         }
 
-        public static void GetPersonalInfo(out string io_Name, out string io_PhoneNumber)
+
+        public static void GetPersonalInfo(out string io_Name, out string io_PhoneNumber, out string io_LicenseNumber)
         {
-            StringBuilder message = new StringBuilder(string.Format(@"We also require your {0}.
-Please enter your {1} and {2}:",
-                                    Messages.k_InputMessages[(int)Messages.eInputQueries.PersonalInfo],
-                                    Messages.k_InputMessages[(int)Messages.eInputQueries.Name],
-                                    Messages.k_InputMessages[(int)Messages.eInputQueries.PhoneNumber]));
+            StringBuilder message = new StringBuilder(
+                                        string.Format(@"We require your {0}.{1}",
+                                        Messages.k_InputMessages[(int)Messages.eInputQueries.PersonalInfo],
+                                        Environment.NewLine));
             Console.WriteLine(message);
-            message.Clear();
-            message.AppendFormat(@"Enter your {0} and press 'enter': ", Messages.k_InputMessages[(int)Messages.eInputQueries.Name]);
-            Console.WriteLine(message);
+            ShowInputMessage(message,
+                            Messages.k_InputMessages[(int)Messages.eInputQueries.Request],
+                            Messages.k_InputMessages[(int)Messages.eInputQueries.Name]);
             io_Name = Console.ReadLine();
 
-            message.Clear();
-            message.AppendFormat(@"Enter your {0} and press 'enter': ", Messages.k_InputMessages[(int)Messages.eInputQueries.PhoneNumber]);
-            Console.WriteLine(message);
+            ShowInputMessage(message,
+                            Messages.k_InputMessages[(int)Messages.eInputQueries.Request],
+                            Messages.k_InputMessages[(int)Messages.eInputQueries.PhoneNumber]);
             io_PhoneNumber = Console.ReadLine();
+
+            ShowInputMessage(message,
+                            Messages.k_InputMessages[(int)Messages.eInputQueries.Request],
+                            Messages.k_InputMessages[(int)Messages.eInputQueries.LicenseNumber]);
+            io_LicenseNumber = Console.ReadLine();
         }
 
+        public static void GetVehicleInfo(out float io_EnergyAmount, out float io_WheelPSI, out string io_WheelManufacturer, out string io_ModelName)
+        {
+            StringBuilder message = new StringBuilder(
+                                        string.Format(@"We also require your {0}.{1}", 
+                                        Messages.k_InputMessages[(int)Messages.eInputQueries.VehicleInfo],
+                                        Environment.NewLine));
+
+            Console.WriteLine(message);
+            ShowInputMessage(message,
+                            Messages.k_InputMessages[(int)Messages.eInputQueries.Request],
+                            Messages.k_InputMessages[(int)Messages.eInputQueries.EnergyAmount]);
+            io_EnergyAmount = float.Parse(Console.ReadLine());
+
+            ShowInputMessage(message,
+                            Messages.k_InputMessages[(int)Messages.eInputQueries.Request],
+                            Messages.k_InputMessages[(int)Messages.eInputQueries.WheelPressure]);
+            io_WheelPSI = float.Parse(Console.ReadLine());
+
+            ShowInputMessage(message,
+                            Messages.k_InputMessages[(int)Messages.eInputQueries.Request],
+                            Messages.k_InputMessages[(int)Messages.eInputQueries.WheelManufacturer]);
+            io_WheelManufacturer = Console.ReadLine();
+
+            ShowInputMessage(message,
+                            Messages.k_InputMessages[(int)Messages.eInputQueries.Request],
+                            Messages.k_InputMessages[(int)Messages.eInputQueries.ModelName]);
+            io_ModelName = Console.ReadLine();
+        }
+
+        public static GarageLogic.VehicleFactory.eVehicleTypes GetVehicleType()
+        {
+            Console.WriteLine(Messages.k_InputMessages[(int)Messages.eInputQueries.VehicleType]);
+            string[] vehicleTypes = GarageLogic.VehicleFactory.VehicleTypes;
+            StringBuilder message = new StringBuilder();
+            int choiceCount = 1;
+            GarageLogic.VehicleFactory.eVehicleTypes choiceType;
+
+            foreach (string type in vehicleTypes)
+            {
+                message.AppendFormat(@"{0} - {1}{2}", choiceCount++, type, Environment.NewLine);
+            }
+
+            Console.WriteLine(message);
+            if (!Enum.TryParse(Console.ReadLine(), out choiceType))
+            {
+                throw new FormatException("Invalid vehicle choice");
+            }
+
+            return choiceType;
+        }
+
+        public static void ShowLicenseNumber()
+        {
+
+        }
+
+        
+
+
+
+        public static void ShowFullVehicleInfo(GarageLogic.Garage i_Garage)
+        {
+            StringBuilder message = new StringBuilder();
+            ShowInputMessage(
+                    message, 
+                    Messages.k_InputMessages[(int)Messages.eInputQueries.Request],
+                    Messages.k_InputMessages[(int)Messages.eInputQueries.LicenseNumber]);
+
+            string licenseNumber = Console.ReadLine();
+            Console.WriteLine(i_Garage.GetFullVehicleInfo(licenseNumber));
+        }
     }
 }

@@ -11,16 +11,12 @@ namespace Ex03.GarageLogic
         private const float k_MaxEngineCapacity = 45f; // 45 litres 
         private const float k_MaxWheelPressure = 30f;
         private GasEngine m_Engine;
-        public GasCar(eColor i_Color,
-                      eDoors i_DoorsNumber,
-                      string i_ModelName,
+
+        public GasCar(string i_ModelName,
                       string i_LicenceNumber,
                       string i_WheelManufacturer)
-            : base(i_Color,
-                   i_DoorsNumber,
-                   i_ModelName,
+            : base(i_ModelName,
                    i_LicenceNumber,
-                   0,
                    k_MaxWheelPressure,
                    i_WheelManufacturer)
         {
@@ -30,6 +26,11 @@ namespace Ex03.GarageLogic
         public GasEngine.eFuelTypes FuelType
         {
             get { return m_Engine.FuelType; }
+        }
+
+        public override Engine Engine
+        {
+            get { return m_Engine; }
         }
 
         public float CurrentFuel
@@ -42,10 +43,11 @@ namespace Ex03.GarageLogic
             get { return m_Engine.MaxCapacity; }
         }
 
-        public void Fuel(GasEngine.eFuelTypes i_FuelType, float i_ToFuel)
+        public override string ToString()
         {
-            m_Engine.Fuel(i_FuelType, i_ToFuel);
-            this.EnergyRemaining = (m_Engine.CurrentCapacity / m_Engine.MaxCapacity) * 100;
+            StringBuilder resString = new StringBuilder(base.ToString());
+            resString.Append(m_Engine.ToString());
+            return resString.ToString();
         }
     }
 }

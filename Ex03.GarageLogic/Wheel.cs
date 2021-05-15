@@ -24,9 +24,14 @@ namespace Ex03.GarageLogic
             get { return m_ManufacturerName; }
         }
 
-        public float Pressure
+        public float CurrentPressure
         {
             get { return m_CurrentAirPressure; }
+        }
+
+        public float MaxPressure
+        {
+            get { return m_MaxAirPressure; }
         }
 
         public bool IsEmptyPressure
@@ -38,10 +43,25 @@ namespace Ex03.GarageLogic
         {
             if (m_CurrentAirPressure + i_AirToAdd > m_MaxAirPressure || i_AirToAdd < 0)
             {
-                throw new ValueOutOfRangeException(0, m_MaxAirPressure);
+                throw new ValueOutOfRangeException(0, m_MaxAirPressure, "Wheel");
             }
 
             m_CurrentAirPressure += i_AirToAdd;
+        }
+
+        public void Inflate()
+        {
+            m_CurrentAirPressure = m_MaxAirPressure;
+        }
+
+        public override string ToString()
+        {
+            return string.Format(@"Wheels Manufacturer - {0}
+Wheels PSI - {1} out of {2}
+",
+                          m_ManufacturerName,
+                          m_CurrentAirPressure,
+                          m_MaxAirPressure);
         }
     }
 }

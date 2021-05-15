@@ -15,6 +15,11 @@
             get { return r_MaxCapacity; }
         }
 
+        public float Percentage
+        {
+            get { return (m_CurrentCapacity / r_MaxCapacity) * 100; }
+        }
+
         public float CurrentCapacity
         {
             get { return m_CurrentCapacity; }
@@ -22,7 +27,7 @@
             {
                 if (value > r_MaxCapacity || value < 0)
                 {
-                    throw new ValueOutOfRangeException(0, r_MaxCapacity);
+                    throw new ValueOutOfRangeException(0, r_MaxCapacity, "Engine");
                 }
 
                 m_CurrentCapacity = value;
