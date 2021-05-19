@@ -58,9 +58,11 @@ namespace Ex03.GarageLogic
         {
             return new Wheel(this.ManufacturerName, this.MaxPressure);
         }
+
         public override string ToString()
         {
-            return string.Format(@"Wheels Manufacturer - {0}
+            return string.Format(
+                        @"Wheels Manufacturer - {0}
 Wheels PSI - {1} out of {2}
 ",
                           m_ManufacturerName,

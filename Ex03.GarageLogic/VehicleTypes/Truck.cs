@@ -12,16 +12,19 @@ namespace Ex03.GarageLogic
         private bool m_IsTransportHazardousMaterials;
         private float m_MaxCarryingWeight;
 
-        public Truck(Engine i_engine,
-                     string i_ModelName,
-                     string i_LicenceNumber,
-                     Wheel i_Wheel)
-            : base(i_ModelName,
-                   i_LicenceNumber,
-                   k_WheelNumber,
-                   i_Wheel,
-                   i_engine)
-        {   }
+        public Truck(
+            Engine i_engine,
+            string i_ModelName,
+            string i_LicenceNumber,
+            Wheel i_Wheel)
+            : base(
+                i_ModelName,
+                i_LicenceNumber,
+                k_WheelNumber,
+                i_Wheel,
+                i_engine)
+        {   
+        }
 
         public bool IsTransportHazardousMaterials
         {
@@ -77,6 +80,7 @@ namespace Ex03.GarageLogic
                         throw new FormatException("Invalid cubic capacity");
                     }
                 }
+
                 index++;
             }
         }
@@ -84,7 +88,8 @@ namespace Ex03.GarageLogic
         public override string ToString()
         {
             StringBuilder resString = new StringBuilder(base.ToString());
-            resString.AppendFormat(@"No. of wheels - {0}
+            resString.AppendFormat(
+                    @"No. of wheels - {0}
 Transporting hazardous materials  - {1}
 Maximum carrying weight - {2}
 ",
@@ -95,4 +100,3 @@ Maximum carrying weight - {2}
         }
     }
 }
-

@@ -8,7 +8,14 @@ namespace Ex03.GarageLogic
 {
     public class GasEngine : Engine
     {
-        public enum eFuelTypes { Soler = 1, Octan95, Octan96, Octan98 };
+        public enum eFuelTypes 
+        { 
+            Soler = 1,
+            Octan95,
+            Octan96,
+            Octan98 
+        }
+
         private readonly eFuelTypes r_FuelType;
 
         public GasEngine(eFuelTypes i_FuelType, float i_MaxCapacity)
@@ -40,14 +47,15 @@ namespace Ex03.GarageLogic
 
         public override string ToString()
         {
-            return string.Format(@"Engine capacity - {0} litres
+            return string.Format(
+                        @"Engine capacity - {0} litres
 Current fuel - {1} litres ({2}%)
 Fuel type - {3}
 ",
-                      MaxCapacity,
-                      CurrentCapacity,
-                      Percentage,
-                      FuelType);
+                        MaxCapacity,
+                        CurrentCapacity,
+                        Percentage,
+                        FuelType);
         }
     }
 }

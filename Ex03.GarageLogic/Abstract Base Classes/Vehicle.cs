@@ -74,16 +74,18 @@ namespace Ex03.GarageLogic
         }
 
         public abstract string[] GetParams();
+
         public abstract void InitParams(string i_Params);
 
         public override string ToString()
         {
             StringBuilder resString = new StringBuilder(
-                                      string.Format(@"License number - {0}
+                                      string.Format(
+                                          @"License number - {0}
 Model - {1}
 ",
-                        m_LicenceNumber,
-                        m_ModelName));
+                                             m_LicenceNumber,
+                                             m_ModelName));
             resString.Append(m_Wheels[0].ToString());
             resString.Append(m_Engine.ToString());
             return resString.ToString();

@@ -5,23 +5,40 @@ namespace Ex03.GarageLogic
 {
     public class Car : Vehicle
     {
-        public enum eColors { Red = 1, Silver, White, Black }
-        public enum eDoors { Two = 1, Three, Four, Five}
+        public enum eColors 
+        { 
+            Red = 1,
+            Silver,
+            White,
+            Black 
+        }
+
+        public enum eDoors 
+        { 
+            Two = 1,
+            Three,
+            Four,
+            Five
+        }
+
         private const short k_WheelNumber = 4;
 
         private eDoors m_DoorsNumber;
         private eColors m_Color;
 
-        public Car(Engine i_engine,
-                   string i_ModelName,
-                   string i_LicenceNumber,
-                   Wheel i_Wheel)
-        : base(i_ModelName,
-               i_LicenceNumber,
-               k_WheelNumber,
-               i_Wheel,
-               i_engine)
-        {   }
+        public Car(
+            Engine i_engine,
+            string i_ModelName,
+            string i_LicenceNumber,
+            Wheel i_Wheel)
+        : base(
+            i_ModelName,
+            i_LicenceNumber,
+            k_WheelNumber,
+            i_Wheel,
+            i_engine)
+        {   
+        }
 
         public eColors Color
         {
@@ -94,7 +111,8 @@ namespace Ex03.GarageLogic
         public override string ToString()
         {
             StringBuilder resString = new StringBuilder(base.ToString());
-            resString.AppendFormat(@"No. of wheels - {0}
+            resString.AppendFormat(
+                    @"No. of wheels - {0}
 Color - {1}
 No. of doors - {2}
 ",
@@ -103,6 +121,5 @@ No. of doors - {2}
                       m_DoorsNumber);
             return resString.ToString();
         }
-
     }
 }

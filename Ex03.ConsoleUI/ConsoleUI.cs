@@ -7,12 +7,48 @@ namespace Ex03.ConsoleUI
 {
     public static class ConsoleUI
     {
-        static Garage garage = new Garage();
+        internal enum eMenuQueries
+        {
+            AddVehicle = 1,
+            ViewLicenseNumbers,
+            ChangeState,
+            InflateTires,
+            FuelVehicle,
+            ChargeVehicle,
+            ViewInfoByLicense,
+            Exit
+        }
+
+        private static readonly string[] k_MenuMessages =
+        {
+            @"===================
+Garage Manager 2021
+===================
+",
+            @"{0}. Add a new vehicle to the garage
+",
+            @"{0}. View license numbers of vehicles currently in the garage
+",
+            @"{0}. Change vehicle state
+",
+            @"{0}. Fully inflate vehicle tires
+",
+            @"{0}. Add fuel to a vehicle
+",
+            @"{0}. Charge a vehicle
+",
+            @"{0}. View information of a vehicle
+",
+            @"{0}. Exit
+"
+        };
+
+        private static Garage garage = new Garage();
 
         public static void Run()
         {
             bool quitGarage = false;
-            Messages.eMenuQueries userChoice;
+            eMenuQueries userChoice;
 
             while (!quitGarage)
             {
@@ -21,54 +57,54 @@ namespace Ex03.ConsoleUI
                     Console.Clear();
                     ShowMenu();
                     int choice = int.Parse(Console.ReadLine());
-                    userChoice = (Messages.eMenuQueries)choice;
+                    userChoice = (eMenuQueries)choice;
                     Console.Clear();
 
                     switch (userChoice)
                     {
-                        case Messages.eMenuQueries.AddVehicle://1
+                        case eMenuQueries.AddVehicle:
                             {
                                 AddVehicle();
                                 break;
                             }
 
-                        case Messages.eMenuQueries.ViewLicenseNumbers://2
+                        case eMenuQueries.ViewLicenseNumbers:
                             {
                                 ShowLicenseNumber();
                                 break;
                             }
 
-                        case Messages.eMenuQueries.ChangeState://3
+                        case eMenuQueries.ChangeState:
                             {
                                 ChangeVehicleState();
                                 break;
                             }
 
-                        case Messages.eMenuQueries.InflateTires://4
+                        case eMenuQueries.InflateTires:
                             {
                                 InflateTiresToMax();
                                 break;
                             }
 
-                        case Messages.eMenuQueries.FuelVehicle://5
+                        case eMenuQueries.FuelVehicle:
                             {
                                 FuelVehicle();
                                 break;
                             }
 
-                        case Messages.eMenuQueries.ChargeVehicle:
+                        case eMenuQueries.ChargeVehicle:
                             {
                                 ChargeVehicle();
                                 break;
                             }
 
-                        case Messages.eMenuQueries.ViewInfoByLicense:
+                        case eMenuQueries.ViewInfoByLicense:
                             {
                                 ShowFullVehicleInfo();
                                 break;
                             }
 
-                        case Messages.eMenuQueries.Exit:
+                        case eMenuQueries.Exit:
                             {
                                 quitGarage = true;
                                 Console.WriteLine("See you next time!");
@@ -85,21 +121,24 @@ namespace Ex03.ConsoleUI
                 }
                 catch (FormatException ex)
                 {
-                    Console.WriteLine(@"{0}
+                    Console.WriteLine(
+                            @"{0}
 {1}",
                             ex.Source,
                             ex.Message);
                 }
                 catch (ArgumentException ex)
                 {
-                    Console.WriteLine(@"{0}
+                    Console.WriteLine(
+                            @"{0}
 {1}",
                             ex.ParamName,
                             ex.Message);
                 }
                 catch (ValueOutOfRangeException ex)
                 {
-                    Console.WriteLine(@"{0}
+                    Console.WriteLine(
+                            @"{0}
 {1}",
                             ex.Source,
                             ex.Message);
@@ -109,14 +148,13 @@ namespace Ex03.ConsoleUI
                     ContinueIfKeyPressed();
                 }
             }
-
         }
 
         public static void ShowMenu()
         {
-            for (int i = 0; i < Messages.k_MenuMessages.Length; ++i)
+            for (int i = 0; i < k_MenuMessages.Length; ++i)
             {
-                Console.WriteLine(Messages.k_MenuMessages[i], i);
+                Console.WriteLine(k_MenuMessages[i], i);
             }
         }
 
@@ -140,6 +178,7 @@ namespace Ex03.ConsoleUI
             {
                 throw new FormatException("Invalid vehicle state");
             }
+
             if (!Enum.IsDefined(typeof(Garage.VehicleInformation.eVehicleState), vehicleState))
             {
                 throw new FormatException("Invalid vehicle state");
@@ -147,7 +186,6 @@ namespace Ex03.ConsoleUI
 
             return vehicleState;
         }
-
 
         public static void AddVehicle()
         {
@@ -312,6 +350,7 @@ namespace Ex03.ConsoleUI
             {
                 throw new FormatException("Invalid fuel type");
             }
+
             if(!Enum.IsDefined(typeof(GasEngine.eFuelTypes), fuelType))
             {
                 throw new FormatException("Invalid fuel type");

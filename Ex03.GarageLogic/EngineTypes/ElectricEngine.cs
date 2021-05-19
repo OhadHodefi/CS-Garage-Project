@@ -1,9 +1,10 @@
 ﻿namespace Ex03.GarageLogic
 {
-    public class ElectricEngine: Engine
+    public class ElectricEngine : Engine
     {
-        public ElectricEngine(float i_MaxCapacity) : base(i_MaxCapacity)
-        { }
+        public ElectricEngine(float i_MaxCapacity) : base(i_MaxCapacity) 
+        { 
+        }
 
         internal void Charge(float i_MinutesToCharge, Vehicle i_Vehicle)
         {
@@ -29,12 +30,13 @@
 
         public override string ToString()
         {
-            return string.Format(@"Engine capacity - {0} hours
+            return string.Format(
+                          @"Engine capacity - {0} hours
 Current charge - {1} hours ({2}%)
 ",
-                      MaxCapacity,
-                      CurrentCapacity,
-                      Percentage);
+                          MaxCapacity,
+                          CurrentCapacity,
+                          Percentage);
         }
     }
 }

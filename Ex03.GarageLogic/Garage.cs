@@ -15,15 +15,6 @@ namespace Ex03.GarageLogic
             m_GarageVehicles = new Dictionary<string, VehicleInformation>();
         }
 
-        private const int k_MaxCarFuelTAnk = 45;
-        private const int k_MaxMotorcycleFuelTAnk = 6;
-        private const int k_MaxTruckFuelTAnk = 120;
-        private const float k_MaxBatteryCar = 3.2f;
-        private const float k_MaxBatteryMotorcycle = 1.8f;
-
-        public enum eEngineTyps { gasEngine = 1, electricEngine }
-
-
         public bool AddVehicle(Vehicle i_Vehicle, string i_OwnerName, string i_OwnerPhone)
         {
             bool added = false;
@@ -58,16 +49,17 @@ namespace Ex03.GarageLogic
                 // No filtering
                 if (i_State == null)
                 {
-                    licenses.AppendFormat(@"{0}. {1}{2}",
+                    licenses.AppendFormat(
+                            @"{0}. {1}{2}",
                             licenseCount++,
                             vehicle.Value.GetVehicle.LicenseNumber,
                             Environment.NewLine);
                 }
-
-                // Filter by received state
-                else if (vehicle.Value.CurrentState == i_State)
+                else if (vehicle.Value.CurrentState == i_State) 
                 {
-                    licenses.AppendFormat(@"{0}. {1}{2}",
+                    // Filter by received state
+                    licenses.AppendFormat(
+                            @"{0}. {1}{2}",
                             licenseCount++,
                             vehicle.Value.GetVehicle.LicenseNumber,
                             Environment.NewLine);
@@ -125,9 +117,9 @@ namespace Ex03.GarageLogic
                                                 i_EnergyAmount,
                                                 i_Vehicle);
             }
-            // Electric engine
             else
             {
+                // Electric engine
                 (i_Vehicle.Engine as ElectricEngine).Charge(i_EnergyAmount, i_Vehicle);
             }
         }
@@ -177,7 +169,8 @@ namespace Ex03.GarageLogic
 
             VehicleInformation toShow = m_GarageVehicles[i_LicenseNumber];
             StringBuilder vehicleInfo = new StringBuilder();
-            vehicleInfo.AppendFormat(@"===========================
+            vehicleInfo.AppendFormat(
+                        @"===========================
 Information for {0}'s vehicle
 ===========================
 Phone number - {1}

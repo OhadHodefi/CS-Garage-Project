@@ -8,21 +8,31 @@ namespace Ex03.GarageLogic
 {
     public class Motorcycle : Vehicle
     {
-        public enum eLicenseTypes { A = 1, B1, AA, BB }
+        public enum eLicenseTypes 
+        { 
+            A = 1,
+            B1,
+            AA,
+            BB 
+        }
+
         private const short k_WheelNumber = 2;
         private eLicenseTypes m_LicenseType;
         private int m_CubicCapacity;
 
-        public Motorcycle(Engine i_Engine,
-                          string i_ModelName,
-                          string i_LicenceNumber,
-                          Wheel i_Wheel)
-            : base(i_ModelName,
-                   i_LicenceNumber,
-                   k_WheelNumber,
-                   i_Wheel,
+        public Motorcycle(
+            Engine i_Engine,
+            string i_ModelName,
+            string i_LicenceNumber,
+            Wheel i_Wheel)
+            : base(
+                i_ModelName,
+                i_LicenceNumber,
+                k_WheelNumber,
+                i_Wheel,
                    i_Engine)
-        {   }
+        {   
+        }
 
         public eLicenseTypes LicenseType
         {
@@ -77,6 +87,7 @@ namespace Ex03.GarageLogic
                         throw new FormatException("Invalid cubic capacity");
                     }
                 }
+
                 index++;
             }
         }
@@ -84,7 +95,8 @@ namespace Ex03.GarageLogic
         public override string ToString()
         {
             StringBuilder resString = new StringBuilder(base.ToString());
-            resString.AppendFormat(@"No. of wheels - {0}
+            resString.AppendFormat(
+                    @"No. of wheels - {0}
 License type - {1}
 Cubic capacity (CC) - {2}",
                       k_WheelNumber,
