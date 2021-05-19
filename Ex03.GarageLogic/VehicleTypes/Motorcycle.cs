@@ -57,26 +57,27 @@ namespace Ex03.GarageLogic
 
         public override void InitParams(string i_Params)
         {
-            string[] givenParams = i_Params.Split(char.Parse(Environment.NewLine));
+            string[] givenParams = i_Params.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             string[] currentParams = GetParams();
             int index = 0;
 
             foreach (string param in givenParams)
             {
-                if (currentParams[index++].ToLower().Contains("license"))
+                if (currentParams[index].ToLower().Contains("license"))
                 {
                     if (!Enum.TryParse(param, out m_LicenseType))
                     {
                         throw new FormatException("Invalid license option");
                     }
                 }
-                else if (currentParams[index++].ToLower().Contains("cubic"))
+                else if (currentParams[index].ToLower().Contains("cubic"))
                 {
                     if (!int.TryParse(param, out m_CubicCapacity))
                     {
                         throw new FormatException("Invalid cubic capacity");
                     }
                 }
+                index++;
             }
         }
 
@@ -88,7 +89,7 @@ License type - {1}
 Cubic capacity (CC) - {2}",
                       k_WheelNumber,
                       m_LicenseType,
-                      m_LicenseType);
+                      m_CubicCapacity);
             return resString.ToString();
         }
     }

@@ -25,7 +25,7 @@ Garage Manager 2021
 ",
             @"{0}. Add a new vehicle to the garage
 ",
-            @"{0}. View license numbers of vehicles currently in the garge
+            @"{0}. View license numbers of vehicles currently in the garage
 ",
             @"{0}. Change vehicle state
 ",

@@ -20,7 +20,7 @@ namespace Ex03.GarageLogic
             m_ModelName = i_ModelName;
             m_LicenceNumber = i_LicenceNumber;
             m_Wheels = new List<Wheel>(i_WheelsNumber);
-            i_Engine = m_Engine;
+            m_Engine = i_Engine;
 
             for (int i = 0; i < i_WheelsNumber; i++)
             {

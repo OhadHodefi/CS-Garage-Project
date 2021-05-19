@@ -54,28 +54,30 @@ namespace Ex03.GarageLogic
 
         public override void InitParams(string i_Params)
         {
-            string[] givenParams = i_Params.Split(char.Parse(Environment.NewLine));
+            string[] givenParams = i_Params.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             string[] currentParams = GetParams();
             int index = 0;
 
             foreach (string param in givenParams)
             {
-                if (currentParams[index++].ToLower().Contains("hazard"))
+                if (currentParams[index].ToLower().Contains("hazard"))
                 {
-                    if(param != "Y" && param != "N")
+                    string currentParam = param.ToLower();
+                    if(currentParam != "y" && currentParam != "n")
                     {
                         throw new FormatException("Invalid transport choice");
                     }
 
-                    m_IsTransportHazardousMaterials = param == "Y" ? true : false;
+                    m_IsTransportHazardousMaterials = currentParam == "y" ? true : false;
                 }
-                else if (currentParams[index++].ToLower().Contains("maximum"))
+                else if (currentParams[index].ToLower().Contains("maximum"))
                 {
                     if (!float.TryParse(param, out m_MaxCarryingWeight))
                     {
                         throw new FormatException("Invalid cubic capacity");
                     }
                 }
+                index++;
             }
         }
 

@@ -26,35 +26,39 @@ namespace Ex03.ConsoleUI
 
                     switch (userChoice)
                     {
-                        case Messages.eMenuQueries.AddVehicle:
+                        case Messages.eMenuQueries.AddVehicle://1
                             {
                                 AddVehicle();
                                 break;
                             }
 
-                        case Messages.eMenuQueries.ViewLicenseNumbers:
+                        case Messages.eMenuQueries.ViewLicenseNumbers://2
                             {
                                 ShowLicenseNumber();
                                 break;
                             }
 
-                        case Messages.eMenuQueries.ChangeState:
+                        case Messages.eMenuQueries.ChangeState://3
                             {
+                                ChangeVehicleState();
                                 break;
                             }
 
-                        case Messages.eMenuQueries.InflateTires:
+                        case Messages.eMenuQueries.InflateTires://4
                             {
+                                InflateTiresToMax();
                                 break;
                             }
 
-                        case Messages.eMenuQueries.FuelVehicle:
+                        case Messages.eMenuQueries.FuelVehicle://5
                             {
+                                FuelVehicle();
                                 break;
                             }
 
                         case Messages.eMenuQueries.ChargeVehicle:
                             {
+                                ChargeVehicle();
                                 break;
                             }
 
@@ -121,6 +125,29 @@ namespace Ex03.ConsoleUI
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
         }
+        
+        public static string LicenseQuery()
+        {
+            Console.WriteLine("Please enter the vehicle's license number and then press 'enter': ");
+            return Console.ReadLine();
+        }
+
+        public static Garage.VehicleInformation.eVehicleState GetVehicleState()
+        {
+            Garage.VehicleInformation.eVehicleState vehicleState;
+
+            if (!Enum.TryParse(Console.ReadLine(), out vehicleState))
+            {
+                throw new FormatException("Invalid vehicle state");
+            }
+            if (!Enum.IsDefined(typeof(Garage.VehicleInformation.eVehicleState), vehicleState))
+            {
+                throw new FormatException("Invalid vehicle state");
+            }
+
+            return vehicleState;
+        }
+
 
         public static void AddVehicle()
         {
@@ -130,23 +157,23 @@ namespace Ex03.ConsoleUI
             GetVehicleInfo(out modelName, out licenseNumber, out wheelManufacturer, out wheelPSI, out energyAmount);
             GetPersonalInfo(out name, out phoneNumber);
             Console.Clear();
-            VehicleFactory.eVehicleTypes vehicleType = GetVehicleType();
 
-            Vehicle toAdd = VehicleFactory.MakeVehicle(vehicleType, licenseNumber, modelName, wheelManufacturer);
-            string[] moreParams = toAdd.GetParams();
+            VehicleFactory.eVehicleTypes vehicleType = GetVehicleType();
+            Vehicle vehicleToAdd = VehicleFactory.MakeVehicle(vehicleType, licenseNumber, modelName, wheelManufacturer);
+            garage.AddCurrentWheelPSIAndEnergyAmount(vehicleToAdd, wheelPSI, energyAmount);
+
+            string[] moreParams = vehicleToAdd.GetParams();
             StringBuilder answer = new StringBuilder();
             Console.Clear();
             Console.WriteLine("{0}Please choose the extra properties of the vehicle: ", Environment.NewLine);
-
             foreach (string param in moreParams)
             {
                 Console.WriteLine(param);
                 answer.AppendLine(Console.ReadLine());
-                Console.WriteLine(answer.Length);
             }
 
-            toAdd.InitParams(answer.ToString());
-            garage.AddVehicle(toAdd, name, phoneNumber);
+            vehicleToAdd.InitParams(answer.ToString());
+            garage.AddVehicle(vehicleToAdd, name, phoneNumber);
             Console.Clear();
             Console.WriteLine("Thanks {0}, your vehicle with license no. {1} was added successfully.", name, licenseNumber);
         }
@@ -171,8 +198,7 @@ namespace Ex03.ConsoleUI
                                 out float io_WheelPSI,
                                 out float io_EnergyAmount)
         {
-            Console.WriteLine("Please enter license number and then press 'enter':");
-            io_licenseNumber = Console.ReadLine();
+            io_licenseNumber = LicenseQuery();
             if(garage.IsExists(io_licenseNumber))
             {
                 garage.ChangeVehicleState(Garage.VehicleInformation.eVehicleState.Repairing, io_licenseNumber);
@@ -195,7 +221,6 @@ namespace Ex03.ConsoleUI
             Console.WriteLine("{0}Please enter current wheel's PSI and then press 'enter':", Environment.NewLine);
             io_CurrentPSI = float.Parse(Console.ReadLine());
         }
-
 
         public static VehicleFactory.eVehicleTypes GetVehicleType()
         {
@@ -220,13 +245,128 @@ namespace Ex03.ConsoleUI
 
         public static void ShowLicenseNumber()
         {
+            Garage.VehicleInformation.eVehicleState? stateToFilter = null;
+            Console.WriteLine("Do you want to filter by vehicle state? (Y / N)");
+            string filterAnswer = Console.ReadLine().ToLower();
+            if (filterAnswer == "y")
+            {
+                string[] vehicleStates = Enum.GetNames(typeof(Garage.VehicleInformation.eVehicleState));
+                int choiceNumber = 1;
+                StringBuilder message = new StringBuilder();
 
+                Console.WriteLine("Please choose the state to filter by: ");
+                foreach(string state in vehicleStates)
+                {
+                    message.AppendFormat(@"{0} - {1}{2}", choiceNumber++, state, Environment.NewLine);
+                }
+
+                Console.WriteLine(message);
+                stateToFilter = GetVehicleState();
+            }
+            else if(filterAnswer != "n")
+            {
+                throw new FormatException("Invalid choice.");
+            }
+
+            Console.WriteLine(garage.GetLicenseNumbers(stateToFilter));
+        }
+
+        public static void ChangeVehicleState()
+        {
+            string licenseNumber = LicenseQuery();
+            string[] vehicleStates = Enum.GetNames(typeof(Garage.VehicleInformation.eVehicleState));
+            int choiceNumber = 1;
+            if (garage.IsExists(licenseNumber))
+            {
+                Garage.VehicleInformation.eVehicleState vehicleState;
+                StringBuilder message = new StringBuilder();
+
+                Console.WriteLine("Please choose the new state: ");
+                foreach (string state in vehicleStates)
+                {
+                    message.AppendFormat(@"{0} - {1}{2}", choiceNumber++, state, Environment.NewLine);
+                }
+
+                Console.WriteLine(message);
+                vehicleState = GetVehicleState();
+                garage.ChangeVehicleState(vehicleState, licenseNumber);
+                Console.WriteLine("Vehicle with license no. '{0}' updated to {1}.", licenseNumber, vehicleState);
+            }
+            else
+            {
+                Console.WriteLine("No matching vehicle found in the garage.");
+            }
+        }
+
+        public static void InflateTiresToMax()
+        {
+            string liceneNumber = LicenseQuery();
+            garage.InflateWheels(liceneNumber);
+            Console.WriteLine("Vehicle with license no. {0} tires inflated to max.", liceneNumber);
+        }
+
+        public static GasEngine.eFuelTypes GetFuelType()
+        {
+            GasEngine.eFuelTypes fuelType;
+            if(!Enum.TryParse(Console.ReadLine(), out fuelType))
+            {
+                throw new FormatException("Invalid fuel type");
+            }
+            if(!Enum.IsDefined(typeof(GasEngine.eFuelTypes), fuelType))
+            {
+                throw new FormatException("Invalid fuel type");
+            }
+
+            return fuelType;
+        }
+
+        public static void FuelVehicle()
+        {
+            string liceneNumber = LicenseQuery();
+            if(!garage.IsExists(liceneNumber))
+            {
+                Console.WriteLine("No matching vehicle found in the garage.");
+            }
+            else
+            {
+                string[] fuelTypes = Enum.GetNames(typeof(GasEngine.eFuelTypes));
+                int choiceNumber = 1;
+                StringBuilder message = new StringBuilder();
+                GasEngine.eFuelTypes fuelType;
+                Console.WriteLine("Please choose fuel type:");
+                foreach (string type in fuelTypes)
+                {
+                    message.AppendFormat(@"{0} - {1}{2}", choiceNumber++, type, Environment.NewLine);
+                }
+
+                Console.WriteLine(message);
+                fuelType = GetFuelType();
+                Console.WriteLine("Enter amount of fuel to add and then press 'enter': ");
+                float fuelToAdd = float.Parse(Console.ReadLine());
+                garage.FuelVehicle(fuelToAdd, fuelType, liceneNumber);
+                Console.WriteLine("Added {0} fuel to vehicle with license no. '{1}'.", fuelToAdd, liceneNumber);
+            }
+        }
+
+        public static void ChargeVehicle()
+        {
+            string liceneNumber = LicenseQuery();
+            if (!garage.IsExists(liceneNumber))
+            {
+                Console.WriteLine("No matching vehicle found in the garage.");
+            }
+            else
+            {
+                Console.WriteLine("Please enter the amount in minutes to charge and press 'enter': ");
+                float minutesToAdd = float.Parse(Console.ReadLine());
+                garage.ChargeVehicle(minutesToAdd, liceneNumber);
+                Console.WriteLine("Added {0} minutes to vehicle with license no. '{1}'.", minutesToAdd, liceneNumber);
+            }
         }
 
         public static void ShowFullVehicleInfo()
         {
-            Console.WriteLine("Please enter the vehicle's license number and then press 'enter': ");
-            string licenseNumber = Console.ReadLine();
+            string licenseNumber = LicenseQuery();
             Console.WriteLine(garage.GetFullVehicleInfo(licenseNumber));
         }
     }

@@ -8,7 +8,7 @@ namespace Ex03.GarageLogic
 {
     public class GasEngine : Engine
     {
-        public enum eFuelTypes { Soler, Octan95, Octan96, Octan98 };
+        public enum eFuelTypes { Soler = 1, Octan95, Octan96, Octan98 };
         private readonly eFuelTypes r_FuelType;
 
         public GasEngine(eFuelTypes i_FuelType, float i_MaxCapacity)

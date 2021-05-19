@@ -7,30 +7,24 @@
 
         internal void Charge(float i_MinutesToCharge, Vehicle i_Vehicle)
         {
-            if(i_MinutesToCharge + CurrentCapacity > MaxCapacity || i_MinutesToCharge < 0)
+            float hoursToCharge = i_MinutesToCharge / 60;
+            if (hoursToCharge + CurrentCapacity > MaxCapacity || i_MinutesToCharge < 0)
             {
                 throw new ValueOutOfRangeException(0, MaxCapacity - CurrentCapacity, "Electric Engine");
             }
 
-            CurrentCapacity += i_MinutesToCharge;
+            CurrentCapacity += hoursToCharge;
             i_Vehicle.EnergyRemaining = this.Percentage;
         }
 
         internal float MaxEngineHours
         {
-            get { return MaxCapacity / 60; }
+            get { return MaxCapacity; }
         }
 
         internal float HoursLeft
         {
-            get { return CurrentCapacity / 60; }
-        }
-
-        internal string TimeLeftString
-        {
-            get { return string.Format(@"{0}:{1}",
-                                HoursLeft,
-                                CurrentCapacity % 60); }
+            get { return CurrentCapacity; }
         }
 
         public override string ToString()

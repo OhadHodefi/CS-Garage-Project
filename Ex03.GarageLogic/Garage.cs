@@ -28,7 +28,7 @@ namespace Ex03.GarageLogic
         {
             bool added = false;
 
-            if(!m_GarageVehicles.ContainsKey(i_Vehicle.LicenseNumber))
+            if (!m_GarageVehicles.ContainsKey(i_Vehicle.LicenseNumber))
             {
                 added = true;
                 m_GarageVehicles.Add(
@@ -48,20 +48,23 @@ namespace Ex03.GarageLogic
             return m_GarageVehicles.ContainsKey(i_LicenseNumber);
         }
 
-        public string GetLicenseNumbers(bool i_FilterByState, VehicleInformation.eVehicleState i_State)
+        public string GetLicenseNumbers(VehicleInformation.eVehicleState? i_State)
         {
-            StringBuilder licenses = new StringBuilder();
+            StringBuilder licenses = new StringBuilder(string.Empty);
             int licenseCount = 1;
 
-            foreach(KeyValuePair<string, VehicleInformation> vehicle in m_GarageVehicles)
+            foreach (KeyValuePair<string, VehicleInformation> vehicle in m_GarageVehicles)
             {
-                if(!i_FilterByState)
-                 {
+                // No filtering
+                if (i_State == null)
+                {
                     licenses.AppendFormat(@"{0}. {1}{2}",
                             licenseCount++,
                             vehicle.Value.GetVehicle.LicenseNumber,
                             Environment.NewLine);
-                 }
+                }
+
+                // Filter by received state
                 else if (vehicle.Value.CurrentState == i_State)
                 {
                     licenses.AppendFormat(@"{0}. {1}{2}",
@@ -71,12 +74,17 @@ namespace Ex03.GarageLogic
                 }
             }
 
+            if(string.IsNullOrEmpty(licenses.ToString()))
+            {
+                licenses.Append("No licenses to show.");
+            }
+
             return licenses.ToString();
         }
 
         public void ChangeVehicleState(VehicleInformation.eVehicleState i_NewState, string i_LicenseNumber)
         {
-            if(!m_GarageVehicles.ContainsKey(i_LicenseNumber))
+            if (!m_GarageVehicles.ContainsKey(i_LicenseNumber))
             {
                 throw new ArgumentException("No matching vehicle found in the garage");
             }
@@ -92,9 +100,35 @@ namespace Ex03.GarageLogic
             }
 
             List<Wheel> wheels = m_GarageVehicles[i_LicenseNumber].GetVehicle.Wheels;
-            foreach(Wheel wheel in wheels)
+            foreach (Wheel wheel in wheels)
             {
                 wheel.Inflate();
+            }
+        }
+
+        public void InflateWheels(Vehicle i_Vehicle, float i_PSIToAdd)
+        {
+            List<Wheel> wheels = i_Vehicle.Wheels;
+            foreach (Wheel wheel in wheels)
+            {
+                wheel.Inflate(i_PSIToAdd);
+            }
+        }
+
+        public void AddCurrentWheelPSIAndEnergyAmount(Vehicle i_Vehicle, float i_WheelPSI, float i_EnergyAmount)
+        {
+            InflateWheels(i_Vehicle, i_WheelPSI);
+            if(i_Vehicle.Engine is GasEngine)
+            {
+                (i_Vehicle.Engine as GasEngine).Fuel(
+                                                (i_Vehicle.Engine as GasEngine).FuelType,
+                                                i_EnergyAmount,
+                                                i_Vehicle);
+            }
+            // Electric engine
+            else
+            {
+                (i_Vehicle.Engine as ElectricEngine).Charge(i_EnergyAmount, i_Vehicle);
             }
         }
 
@@ -161,7 +195,7 @@ State - {2}{3}",
         {
             public enum eVehicleState
             {
-                Repairing,
+                Repairing = 1,
                 Repaired,
                 Paid
             }
