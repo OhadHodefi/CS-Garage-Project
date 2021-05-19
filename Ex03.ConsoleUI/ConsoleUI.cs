@@ -7,11 +7,12 @@ namespace Ex03.ConsoleUI
 {
     public static class ConsoleUI
     {
+        static Garage garage = new Garage();
+
         public static void Run()
         {
             bool quitGarage = false;
             Messages.eMenuQueries userChoice;
-            Garage garage = new Garage();
 
             while (!quitGarage)
             {
@@ -30,9 +31,6 @@ namespace Ex03.ConsoleUI
                                 AddVehicle();
                                 break;
                             }
-
-
-
 
                         case Messages.eMenuQueries.ViewLicenseNumbers:
                             {
@@ -62,15 +60,21 @@ namespace Ex03.ConsoleUI
 
                         case Messages.eMenuQueries.ViewInfoByLicense:
                             {
-                                ShowFullVehicleInfo(garage);
+                                ShowFullVehicleInfo();
+                                break;
+                            }
+
+                        case Messages.eMenuQueries.Exit:
+                            {
+                                quitGarage = true;
+                                Console.WriteLine("See you next time!");
+                                Thread.Sleep(1500);
                                 break;
                             }
 
                         default:
                             {
-                                quitGarage = true;
-                                Console.WriteLine("See you next time!");
-                                Thread.Sleep(1500);
+                                Console.WriteLine("Invalid menu choice.");
                                 break;
                             }
                     }
@@ -97,8 +101,8 @@ namespace Ex03.ConsoleUI
                             ex.Message);
                 }
                 finally
-                {   
-                    Thread.Sleep(3000);
+                {
+                    ContinueIfKeyPressed();
                 }
             }
 
@@ -112,65 +116,90 @@ namespace Ex03.ConsoleUI
             }
         }
 
+        public static void ContinueIfKeyPressed()
+        {
+            Console.WriteLine("Press any key to continue");
+            Console.ReadKey();
+        }
+
+        public static void AddVehicle()
+        {
+            string name, phoneNumber, modelName, licenseNumber, wheelManufacturer;
+            float wheelPSI, energyAmount;
+
+            GetVehicleInfo(out modelName, out licenseNumber, out wheelManufacturer, out wheelPSI, out energyAmount);
+            GetPersonalInfo(out name, out phoneNumber);
+            Console.Clear();
+            VehicleFactory.eVehicleTypes vehicleType = GetVehicleType();
+
+            Vehicle toAdd = VehicleFactory.MakeVehicle(vehicleType, licenseNumber, modelName, wheelManufacturer);
+            string[] moreParams = toAdd.GetParams();
+            StringBuilder answer = new StringBuilder();
+            Console.Clear();
+            Console.WriteLine("{0}Please choose the extra properties of the vehicle: ", Environment.NewLine);
+
+            foreach (string param in moreParams)
+            {
+                Console.WriteLine(param);
+                answer.AppendLine(Console.ReadLine());
+                Console.WriteLine(answer.Length);
+            }
+
+            toAdd.InitParams(answer.ToString());
+            garage.AddVehicle(toAdd, name, phoneNumber);
+            Console.Clear();
+            Console.WriteLine("Thanks {0}, your vehicle with license no. {1} was added successfully.", name, licenseNumber);
+        }
 
         public static void GetPersonalInfo(out string io_Name, out string io_PhoneNumber)
         {
-            Console.WriteLine("Please enter your name:");
+            Console.WriteLine("{0}Please enter your name:", Environment.NewLine);
             io_Name = Console.ReadLine();
 
-            Console.WriteLine("Please enter your phone number:");
+            Console.WriteLine("{0}Please enter your phone number:", Environment.NewLine);
             io_PhoneNumber = Console.ReadLine();
-            if(!int.TryParse(io_PhoneNumber, out int _))
+            if(!long.TryParse(io_PhoneNumber, out long _))
             {
                 throw new FormatException("Not a valid phone number");
             }
         }
 
-        public static void GetWheelInfo(out string io_ManufacturerName, out float io_CurrentPSI)
-        {
-            Console.WriteLine("Please enter wheel's manufacturer name:");
-            io_ManufacturerName = Console.ReadLine();
-
-            Console.WriteLine("Please enter current wheel's PSI:");
-            io_CurrentPSI = float.Parse(Console.ReadLine());
-        }
-
-        public static Vehicle GetVehicleInfo(
+        public static void GetVehicleInfo(
                                 out string io_modelName,
                                 out string io_licenseNumber,
                                 out string io_WheelManufacturer,
                                 out float io_WheelPSI,
                                 out float io_EnergyAmount)
         {
-            Console.WriteLine("Please enter model name:");
-            io_modelName = Console.ReadLine();
-
-            Console.WriteLine("Please enter license number:");
+            Console.WriteLine("Please enter license number and then press 'enter':");
             io_licenseNumber = Console.ReadLine();
+            if(garage.IsExists(io_licenseNumber))
+            {
+                garage.ChangeVehicleState(Garage.VehicleInformation.eVehicleState.Repairing, io_licenseNumber);
+                throw new ArgumentException("This vehicle already exists in the garage. Changed state to repairing");
+            }
+
+            Console.WriteLine("{0}Please enter model name and then press 'enter':", Environment.NewLine);
+            io_modelName = Console.ReadLine();
+            
             GetWheelInfo(out io_WheelManufacturer, out io_WheelPSI);
-            VehicleFactory.eVehicleTypes vehicleType = GetVehicleType();
-
-            Vehicle vehicle = Garage.addVehicle(io_modelName, io_licenseNumber, wheel, engine, vehicleType);
-            licenseNumber = Console.ReadLine();
-
-            return new Vehicle(;
+            Console.WriteLine("{0}Please enter energy(fuel / charge) left in the vehicle and then press 'enter':", Environment.NewLine);
+            io_EnergyAmount = float.Parse(Console.ReadLine());
         }
-        public static void AddVehicle()
+
+        public static void GetWheelInfo(out string io_ManufacturerName, out float io_CurrentPSI)
         {
-            string name, phoneNumber, modelName, licenseNumber;
+            Console.WriteLine("{0}Please enter wheel's manufacturer name and then press 'enter':", Environment.NewLine);
+            io_ManufacturerName = Console.ReadLine();
 
-            GetPersonalInfo(out name, out phoneNumber);
-            GetVehicleInfo(out modelName, out licenseNumber);
-
-
-
-            chooseVehiclesType();
+            Console.WriteLine("{0}Please enter current wheel's PSI and then press 'enter':", Environment.NewLine);
+            io_CurrentPSI = float.Parse(Console.ReadLine());
         }
 
 
         public static VehicleFactory.eVehicleTypes GetVehicleType()
         {
-            Console.WriteLine("Please choose the type of vehicle: ");
+            Console.WriteLine("{0}Please choose the type of vehicle: ", Environment.NewLine);
             string[] vehicleTypes = VehicleFactory.VehicleTypes;
             StringBuilder message = new StringBuilder();
             int choiceCount = 1;
@@ -194,11 +223,11 @@ namespace Ex03.ConsoleUI
 
         }
 
-        public static void ShowFullVehicleInfo(Garage i_Garage)
+        public static void ShowFullVehicleInfo()
         {
             Console.WriteLine("Please enter the vehicle's license number and then press 'enter': ");
             string licenseNumber = Console.ReadLine();
-            Console.WriteLine(i_Garage.GetFullVehicleInfo(licenseNumber));
+            Console.WriteLine(garage.GetFullVehicleInfo(licenseNumber));
         }
     }
 }

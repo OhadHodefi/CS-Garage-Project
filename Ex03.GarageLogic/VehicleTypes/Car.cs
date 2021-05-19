@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
@@ -41,28 +38,57 @@ namespace Ex03.GarageLogic
             set { m_DoorsNumber = value; }
         }
 
-        public override object[] GetParams()
+        public override string[] GetParams()
         {
-            //StringBuilder paramStr = new StringBuilder();
-            //string[] doors = Enum.GetNames(typeof(eDoors));
-            //string[] colors = Enum.GetNames(typeof(eColors));
-            //paramStr.Append("Door options: " + Environment.NewLine);
-            //int optionNumber = 1;
-            //foreach (string door in doors)
-            //{
-            //    paramStr.AppendFormat(@"{0} - {1}{2}", optionNumber, door, Environment.NewLine);
-            //}
+            StringBuilder carParamsString = new StringBuilder();
+            string[] carParams = new string[2];
+            carParamsString.AppendFormat(@"Colors: {0}", Environment.NewLine);
+            string[] options = Enum.GetNames(typeof(eColors));
+            int choiceCount = 1;
+            foreach(string color in options)
+            {
+                carParamsString.AppendFormat(@"{0} - {1}{2}", choiceCount++, color, Environment.NewLine);
+            }
 
-            //paramStr.Append("Color options: " + Environment.NewLine);
-            //optionNumber = 1;
-            //foreach (string color in colors)
-            //{
-            //    paramStr.AppendFormat(@"{0} - {1}{2}", optionNumber, color, Environment.NewLine);
-            //}
+            carParams[0] = carParamsString.ToString();
+            carParamsString.Clear();
+            choiceCount = 1;
+            carParamsString.AppendFormat(@"Doors: {0}", Environment.NewLine);
+            options = Enum.GetNames(typeof(eDoors));
+            foreach (string door in options)
+            {
+                carParamsString.AppendFormat(@"{0} - {1}{2}", choiceCount++, door, Environment.NewLine);
+            }
 
-            ////return paramStr.ToString();
-            Type[] types = { typeof(eDoors), typeof(eColors) };
-            return types;
+            carParams[1] = carParamsString.ToString();
+            return carParams;
+        }
+
+        public override void InitParams(string i_Params)
+        {
+            string[] givenParams = i_Params.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            string[] currentParams = GetParams();
+            int index = 0;
+
+            foreach(string param in givenParams)
+            {
+                if(currentParams[index].ToLower().Contains("colors"))
+                {
+                    if(!Enum.TryParse(param, out m_Color))
+                    {
+                        throw new FormatException("Invalid color option");
+                    }
+                }
+                else if(currentParams[index].ToLower().Contains("doors"))
+                {
+                    if(!Enum.TryParse(param, out m_DoorsNumber))
+                    {
+                        throw new FormatException("Invalid door option");
+                    }
+                }
+
+                index++;
+            }
         }
 
         public override string ToString()

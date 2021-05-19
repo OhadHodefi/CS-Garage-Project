@@ -9,10 +9,7 @@ namespace Ex03.GarageLogic
     public class Motorcycle : Vehicle
     {
         public enum eLicenseTypes { A = 1, B1, AA, BB }
-        private const float k_MaxWheelPressure = 30f; // same wheel pressure for both types of motorcycles
         private const short k_WheelNumber = 2;
-        
-        private Engine m_Engine;
         private eLicenseTypes m_LicenseType;
         private int m_CubicCapacity;
 
@@ -39,27 +36,50 @@ namespace Ex03.GarageLogic
             set { m_CubicCapacity = value; }
         }
 
-        //        public override string GetParams()
-        //        {
-        //            StringBuilder paramStr = new StringBuilder();
-        //            string[] licenses = Enum.GetNames(typeof(eLicenseTypes));
-        //            paramStr.Append("License options: " + Environment.NewLine);
-        //            int optionNumber = 1;
-        //            foreach (string license in licenses)
-        //            {
-        //                paramStr.AppendFormat(@"{0} - {1}{2}", optionNumber, license, Environment.NewLine);
-        //            }
-
-        //            paramStr.AppendFormat(@"Cubic capacity (integer):
-        //");
-        //            return paramStr.ToString();
-        //        }
-
-        public override object[] GetParams()
+        public override string[] GetParams()
         {
-            Type[] types = { typeof(eLicenseTypes), m_CubicCapacity.GetType() };
-            return types;
+            StringBuilder motorcycleParamsString = new StringBuilder();
+            string[] motorcycleParams = new string[2];
+            motorcycleParamsString.AppendFormat(@"License types: {0}", Environment.NewLine);
+            string[] options = Enum.GetNames(typeof(eLicenseTypes));
+            int choiceCount = 1;
+            foreach (string license in options)
+            {
+                motorcycleParamsString.AppendFormat(@"{0} - {1}{2}", choiceCount++, license, Environment.NewLine);
+            }
+
+            motorcycleParams[0] = motorcycleParamsString.ToString();
+            motorcycleParamsString.Clear();
+            motorcycleParamsString.AppendFormat(@"Cubic capacity (integer): {0}", Environment.NewLine);
+            motorcycleParams[1] = motorcycleParamsString.ToString();
+            return motorcycleParams;
         }
+
+        public override void InitParams(string i_Params)
+        {
+            string[] givenParams = i_Params.Split(char.Parse(Environment.NewLine));
+            string[] currentParams = GetParams();
+            int index = 0;
+
+            foreach (string param in givenParams)
+            {
+                if (currentParams[index++].ToLower().Contains("license"))
+                {
+                    if (!Enum.TryParse(param, out m_LicenseType))
+                    {
+                        throw new FormatException("Invalid license option");
+                    }
+                }
+                else if (currentParams[index++].ToLower().Contains("cubic"))
+                {
+                    if (!int.TryParse(param, out m_CubicCapacity))
+                    {
+                        throw new FormatException("Invalid cubic capacity");
+                    }
+                }
+            }
+        }
+
         public override string ToString()
         {
             StringBuilder resString = new StringBuilder(base.ToString());

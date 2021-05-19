@@ -9,7 +9,6 @@ namespace Ex03.GarageLogic
     public class ElectricCar : Car
     {
         private const float k_MaxBatteryCapacity = 192f; // 192 minutes -> 3.2 hours
-        private const float k_MaxWheelPressure = 32f;
         private ElectricEngine m_Engine;
 
         public ElectricCar(string i_ModelName,

@@ -14,10 +14,19 @@ namespace Ex03.GarageLogic
             Truck
         }
 
+        // Motorcycle constant properties
+        internal const float k_MotorcycleMaxWheelPressure = 30f; // same wheel pressure for both types of motorcycles
         internal const float k_MotorcycleMaxBatteryCapacity = 108f; // 108 minutes -> 1.8 hours
         internal const float k_MotorcycleMaxEngineCapacity = 6f; // 6 litres
+
+        // Car constant properties
+        internal const float k_ElectricCarMaxWheelPressure = 32f;
         internal const float k_CarMaxBatteryCapacity = 192f; // 192 minutes -> 3.2 hours
+        internal const float k_GasCarMaxWheelPressure = 30f;
         internal const float k_CarMaxEngineCapacity = 45f; // 45 litres 
+
+        // Truck constant properties
+        internal const float k_TruckMaxWheelPressure = 26f;
         internal const float k_TruckMaxEngineCapacity = 120f; // 120 litres
 
 
@@ -40,38 +49,50 @@ namespace Ex03.GarageLogic
                 case eVehicleTypes.GasMotorcycle:
                     {
                         newVehicle = new Motorcycle(
-                                    new GasEngine(GasEngine.eFuelTypes.Octan98, k_MotorcycleMaxEngineCapacity),
-                                    i_ModelName,
-                                    i_LicenseNumber,
-                                    new Wheel(i_WheelManufacturer, );
+                                     new GasEngine(GasEngine.eFuelTypes.Octan98, k_MotorcycleMaxEngineCapacity),
+                                     i_ModelName,
+                                     i_LicenseNumber,
+                                     new Wheel(i_WheelManufacturer, k_MotorcycleMaxWheelPressure));
                         break;
                     }
 
                 case eVehicleTypes.ElectricMotorcycle:
                     {
                         newVehicle = new Motorcycle(
-                                    new ElectricEngine(k_MotorcycleMaxBatteryCapacity),
-                                    i_ModelName,
-                                    i_LicenseNumber,
-                                    new Wheel(i_WheelManufacturer, );
+                                     new ElectricEngine(k_MotorcycleMaxBatteryCapacity),
+                                     i_ModelName,
+                                     i_LicenseNumber,
+                                     new Wheel(i_WheelManufacturer, k_MotorcycleMaxWheelPressure));
                         break;
                     }
 
                 case eVehicleTypes.GasCar:
                     {
-                        newVehicle = new GasCar(i_ModelName, i_LicenseNumber, i_WheelManufacturer);
+                        newVehicle = new Car(
+                                     new GasEngine(GasEngine.eFuelTypes.Octan95, k_CarMaxEngineCapacity),
+                                     i_ModelName,
+                                     i_LicenseNumber,
+                                     new Wheel(i_WheelManufacturer, k_GasCarMaxWheelPressure));
                         break;
                     }
 
                 case eVehicleTypes.ElectricCar:
                     {
-                        newVehicle = new ElectricCar(i_ModelName, i_LicenseNumber, i_WheelManufacturer);
+                        newVehicle = new Car(
+                                     new ElectricEngine(k_CarMaxBatteryCapacity),
+                                     i_ModelName,
+                                     i_LicenseNumber,
+                                     new Wheel(i_WheelManufacturer, k_ElectricCarMaxWheelPressure));
                         break;
                     }
 
                 case eVehicleTypes.Truck:
                     {
-                        newVehicle = new Truck(i_ModelName, i_LicenseNumber, i_WheelManufacturer);
+                        newVehicle = new Truck(
+                                     new GasEngine(GasEngine.eFuelTypes.Soler, k_TruckMaxEngineCapacity),
+                                     i_ModelName,
+                                     i_LicenseNumber,
+                                     new Wheel(i_WheelManufacturer, k_TruckMaxWheelPressure));
                         break;
                     }
 
@@ -83,7 +104,6 @@ namespace Ex03.GarageLogic
 
             return newVehicle;
         }
-
 
 
         public static void SetCarParams(Car.eDoors i_DoorNumber, Car.eColors i_CarColor, Vehicle i_Vehicle)
@@ -134,10 +154,5 @@ namespace Ex03.GarageLogic
             toSet.IsTransportHazardousMaterials = i_IsHazardous;
             toSet.MaxCarryingWeight = i_MaxCarryingWeight;
         }
-
-
-
-
-
     }
 }

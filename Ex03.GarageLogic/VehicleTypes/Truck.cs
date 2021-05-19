@@ -9,10 +9,8 @@ namespace Ex03.GarageLogic
     public class Truck : Vehicle
     {
         private const short k_WheelNumber = 16;
-        private const float k_WheelPressure = 26f;
         private bool m_IsTransportHazardousMaterials;
         private float m_MaxCarryingWeight;
-        private GasEngine m_Engine;
 
         public Truck(Engine i_engine,
                      string i_ModelName,
@@ -33,7 +31,7 @@ namespace Ex03.GarageLogic
 
         public GasEngine.eFuelTypes FuelType
         {
-            get { return m_Engine.FuelType; }
+            get { return (Engine as GasEngine).FuelType; }
         }
 
         public float MaxCarryingWeight
@@ -42,32 +40,43 @@ namespace Ex03.GarageLogic
             set { m_MaxCarryingWeight = value; }
         }
 
-        public float CurrentFuel
+        public override string[] GetParams()
         {
-            get { return m_Engine.CurrentCapacity; }
+            StringBuilder truckParamsString = new StringBuilder();
+            string[] truckParams = new string[2];
+            truckParamsString.AppendFormat(@"Transporting hazardous materials? Y / N{0}", Environment.NewLine);
+            truckParams[0] = truckParamsString.ToString();
+            truckParamsString.Clear();
+            truckParamsString.AppendFormat(@"Maximum carrying weight (real number): {0}", Environment.NewLine);
+            truckParams[1] = truckParamsString.ToString();
+            return truckParams;
         }
 
-        public float MaxFuel
+        public override void InitParams(string i_Params)
         {
-            get { return m_Engine.MaxCapacity; }
-        }
+            string[] givenParams = i_Params.Split(char.Parse(Environment.NewLine));
+            string[] currentParams = GetParams();
+            int index = 0;
 
+            foreach (string param in givenParams)
+            {
+                if (currentParams[index++].ToLower().Contains("hazard"))
+                {
+                    if(param != "Y" && param != "N")
+                    {
+                        throw new FormatException("Invalid transport choice");
+                    }
 
-
-        //        public override string GetParams()
-        //        {
-        //            StringBuilder paramStr = new StringBuilder();
-        //            paramStr.AppendFormat(@"Transporting hazardous materials?
-        //Y / N");
-        //            paramStr.AppendFormat(@"Maximum carrying weight (integer):
-        //");
-        //            return paramStr.ToString();
-        //        }
-
-        public override object[] GetParams()
-        {
-            Type[] types = { m_IsTransportHazardousMaterials.GetType(), m_MaxCarryingWeight.GetType() };
-            return types;
+                    m_IsTransportHazardousMaterials = param == "Y" ? true : false;
+                }
+                else if (currentParams[index++].ToLower().Contains("maximum"))
+                {
+                    if (!float.TryParse(param, out m_MaxCarryingWeight))
+                    {
+                        throw new FormatException("Invalid cubic capacity");
+                    }
+                }
+            }
         }
 
         public override string ToString()
@@ -80,7 +89,6 @@ Maximum carrying weight - {2}
                       k_WheelNumber,
                       m_IsTransportHazardousMaterials ? "Yes" : "No",
                       m_MaxCarryingWeight);
-            resString.Append(m_Engine.ToString());
             return resString.ToString();
         }
     }

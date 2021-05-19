@@ -35,7 +35,7 @@ namespace Ex03.GarageLogic
 
         public string LicenseNumber
         {
-            get { return m_ModelName; }
+            get { return m_LicenceNumber; }
             set { m_LicenceNumber = value; }
         }
 
@@ -44,10 +44,20 @@ namespace Ex03.GarageLogic
             get { return m_Wheels; }
         }
 
-        //public abstract Engine Engine
-        //{
-        //    get;
-        //}
+        internal Engine Engine
+        {
+            get { return m_Engine; }
+        }
+
+        public float EngineMaxCapacity
+        {
+            get { return m_Engine.MaxCapacity; }
+        }
+
+        public float EngineCurrentCapacity
+        {
+            get { return m_Engine.CurrentCapacity; }
+        }
 
         public float EnergyRemaining
         {
@@ -63,8 +73,8 @@ namespace Ex03.GarageLogic
             }
         }
 
-
-        public abstract object[] GetParams();
+        public abstract string[] GetParams();
+        public abstract void InitParams(string i_Params);
 
         public override string ToString()
         {
@@ -75,6 +85,7 @@ Model - {1}
                         m_LicenceNumber,
                         m_ModelName));
             resString.Append(m_Wheels[0].ToString());
+            resString.Append(m_Engine.ToString());
             return resString.ToString();
         }
     }

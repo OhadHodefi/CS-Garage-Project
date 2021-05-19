@@ -39,17 +39,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientInformation.cs" />
-    <Compile Include="ElectricCar.cs" />
     <Compile Include="EngineTypes\ElectricEngine.cs" />
-    <Compile Include="ElectricMotorcycle.cs" />
     <Compile Include="Garage.cs" />
     <Compile Include="VehicleFactory.cs" />
     <Compile Include="VehicleTypes\Car.cs" />
     <Compile Include="Abstract Base Classes\Engine.cs" />
-    <Compile Include="GasCar.cs" />
     <Compile Include="EngineTypes\GasEngine.cs" />
-    <Compile Include="GasMotorcycle.cs" />
     <Compile Include="VehicleTypes\Motorcycle.cs" />
     <Compile Include="VehicleTypes\Truck.cs" />
     <Compile Include="Abstract Base Classes\Vehicle.cs" />

@@ -24,60 +24,6 @@ namespace Ex03.GarageLogic
         public enum eEngineTyps { gasEngine = 1, electricEngine }
 
 
-
-
-        public static string getOptionOfEngine(string i_vehicleType)
-        {
-            StringBuilder resString = new StringBuilder();
-            if(i_vehicleType.Equals(eVehiclesTyps.car)|| i_vehicleType.Equals(eVehiclesTyps.motorcycle))
-            {
-                resString.AppendFormat(@"1- gas engine
-2- electric engine");
-            }
-            else if(i_vehicleType.Equals(eVehiclesTyps.truck))
-            {
-                resString.AppendFormat(@"1- gas engine");
-            }
-
-            return resString.ToString();
-        }
-
-        public static Engine addEngine(string i_EngineType, string i_vehicleType)
-        {
-            Engine resEngine;
-            if (i_EngineType.Equals(eEngineTyps.electricEngine))
-            {
-                if(i_vehicleType.Equals(eVehiclesTyps.car))
-                {
-                    GasEngine engineForCar = new GasEngine(GasEngine.eFuelTypes.Octan95, k_MaxCarFuelTAnk);
-                    resEngine = engineForCar;
-                }
-                else if (i_vehicleType.Equals(eVehiclesTyps.motorcycle))
-                {
-                    GasEngine engineForMotorcycle = new GasEngine(GasEngine.eFuelTypes.Octan98, k_MaxMotorcycleFuelTAnk);
-                    resEngine = engineForMotorcycle;
-                }
-                else//truck
-                {
-                    GasEngine engineForTruck = new GasEngine(GasEngine.eFuelTypes.Soler, k_MaxTruckFuelTAnk);
-                    resEngine = engineForTruck;
-                }
-            }
-            else
-            {
-                if (i_vehicleType.Equals(eVehiclesTyps.car))
-                {
-                    ElectricEngine engineForCar = new ElectricEngine(k_MaxBatteryCar);
-                    resEngine = engineForCar;
-                }
-                else//motorcycle
-                {
-                    ElectricEngine engineForMotorcycle = new ElectricEngine(k_MaxBatteryMotorcycle);
-                    resEngine = engineForMotorcycle;
-                }
-            }
-            return resEngine;
-        }
         public bool AddVehicle(Vehicle i_Vehicle, string i_OwnerName, string i_OwnerPhone)
         {
             bool added = false;
@@ -97,28 +43,10 @@ namespace Ex03.GarageLogic
             return added;
         }
 
-        public static Vehicle addVehicle(string io_modelName, string io_licenseNumber, Wheel i_wheel, Engine i_engine, string i_vehicleType)
+        public bool IsExists(string i_LicenseNumber)
         {
-            Vehicle resVehicle;
-            if (i_vehicleType.Equals(eVehiclesTyps.car))
-            {
-                Car car = new Car(i_engine, io_modelName, io_licenseNumber, i_wheel);
-                resVehicle = car;
-            }
-            else if(i_vehicleType.Equals(eVehiclesTyps.motorcycle))
-            {
-                Motorcycle motorcycle = new Motorcycle(i_engine, io_modelName, io_licenseNumber, i_wheel);
-                resVehicle = motorcycle;
-            }
-            else//truck
-            {
-                Truck truck = new Truck(i_engine, io_modelName, io_licenseNumber, i_wheel);
-                resVehicle = truck;
-            }
-
-            return resVehicle;
+            return m_GarageVehicles.ContainsKey(i_LicenseNumber);
         }
-
 
         public string GetLicenseNumbers(bool i_FilterByState, VehicleInformation.eVehicleState i_State)
         {
@@ -219,17 +147,15 @@ namespace Ex03.GarageLogic
 Information for {0}'s vehicle
 ===========================
 Phone number - {1}
-State - {2}",
+State - {2}{3}",
                         toShow.OwnerName,
                         toShow.OwnerPhone,
-                        toShow.CurrentState);
+                        toShow.CurrentState,
+                        Environment.NewLine);
 
             vehicleInfo.Append(toShow.GetVehicle.ToString());
             return vehicleInfo.ToString();
         }
-
-
-
 
         public class VehicleInformation
         {
