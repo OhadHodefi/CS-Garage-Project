@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace Ex03.GarageLogic
 {
@@ -12,21 +13,44 @@ namespace Ex03.GarageLogic
             ElectricCar,
             Truck
         }
+        public enum eEngineTypes 
+        { 
+            FuelEngineType,
+            ElectricEngineType
+        }
 
-        public static Vehicle MakeVehicle(eVehicleTypes i_Type,
+
+        public static Vehicle MakeVehicle(eVehicleTypes i_VehicleType, eEngineTypes i_EngineType 
                               string i_LicenseNumber,
                               string i_ModelName,
                               string i_WheelManufacturer)
         {
             Vehicle newVehicle = null;
 
-            switch (i_Type)
+            switch (i_VehicleType)
             {
-                case eVehicleTypes.GasMotorcycle:
+                case eVehicleTypes.Motorcycle:
                     {
-                        newVehicle = new GasMotorcycle(i_ModelName, i_LicenseNumber, i_WheelManufacturer);
-                        break;
+                        switch(i_EngineType)
+                        {
+                            case eEngineTypes.FuelEngineType:
+                                {
+                                    newVehicle = new Motorcycle(new FuelEngine());
+                                    break;
+                                }
+
+                            case eEngineTypes.ElectricEngineType:
+                                {
+                                    newVehicle = new Motorcycle(new ElectricEngine());
+                                    break;
+                                }
+                        }
                     }
+                //case eVehicleTypes.GasMotorcycle:
+                //    {
+                //        newVehicle = new GasMotorcycle(i_ModelName, i_LicenseNumber, i_WheelManufacturer);
+                //        break;
+                //    }
 
                 case eVehicleTypes.ElectricMotorcycle:
                     {
@@ -114,5 +138,21 @@ namespace Ex03.GarageLogic
             toSet.IsTransportHazardousMaterials = i_IsHazardous;
             toSet.MaxCarryingWeight = i_MaxCarryingWeight;
         }
+
+        public static StringBuilder chooseTypeOfVehicle()
+        {
+            string[] vehicleTypes = VehicleTypes;
+            StringBuilder message = new StringBuilder();
+            int choiceCount = 1;
+
+            foreach (string type in vehicleTypes)
+            {
+                message.AppendFormat(@"{0} - {1}{2}", choiceCount++, type, Environment.NewLine);
+            }
+            return message;
+        }
+
+
+
     }
 }

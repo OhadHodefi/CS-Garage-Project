@@ -34,6 +34,7 @@ namespace Ex03.GarageLogic
             get { return m_MaxAirPressure; }
         }
 
+        //??? why we need it?
         public bool IsEmptyPressure
         {
             get { return m_CurrentAirPressure == 0; }
@@ -54,6 +55,10 @@ namespace Ex03.GarageLogic
             m_CurrentAirPressure = m_MaxAirPressure;
         }
 
+        public Wheel DeepClone()
+        {
+            return new Wheel(this.ManufacturerName, this.MaxPressure);
+        }
         public override string ToString()
         {
             return string.Format(@"Wheels Manufacturer - {0}

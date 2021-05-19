@@ -15,17 +15,16 @@ namespace Ex03.GarageLogic
         private float m_MaxCarryingWeight;
         private GasEngine m_Engine;
 
-        public Truck(string i_ModelName,
+        public Truck(Engine i_engine,
+                     string i_ModelName,
                      string i_LicenceNumber,
-                     string i_WheelManufacturer)
+                     Wheel i_Wheel)
             : base(i_ModelName,
                    i_LicenceNumber,
                    k_WheelNumber,
-                   k_WheelPressure,
-                   i_WheelManufacturer)
-        {
-            m_Engine = new GasEngine(GasEngine.eFuelTypes.Soler, k_MaxEngineCapacity);
-        }
+                   i_Wheel,
+                   i_engine)
+        {   }
 
         public bool IsTransportHazardousMaterials
         {
@@ -33,10 +32,10 @@ namespace Ex03.GarageLogic
             set { IsTransportHazardousMaterials = value; }
         }
 
-        public GasEngine.eFuelTypes FuelType
-        {
-            get { return m_Engine.FuelType; }
-        }
+        //public GasEngine.eFuelTypes FuelType
+        //{
+        //    get { return m_Engine.FuelType; }
+        //}
 
         public float MaxCarryingWeight
         {
@@ -44,20 +43,20 @@ namespace Ex03.GarageLogic
             set { m_MaxCarryingWeight = value; }
         }
 
-        public float CurrentFuel
-        {
-            get { return m_Engine.CurrentCapacity; }
-        }
+        //public float CurrentFuel
+        //{
+        //    get { return m_Engine.CurrentCapacity; }
+        //}
 
-        public float MaxFuel
-        {
-            get { return m_Engine.MaxCapacity; }
-        }
+        //public float MaxFuel
+        //{
+        //    get { return m_Engine.MaxCapacity; }
+        //}
 
-        public override Engine Engine
-        {
-            get { return m_Engine; }
-        }
+        //public override Engine Engine
+        //{
+        //    get { return m_Engine; }
+        //}
 
         //        public override string GetParams()
         //        {

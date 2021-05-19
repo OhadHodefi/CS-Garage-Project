@@ -39,6 +39,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientInformation.cs" />
     <Compile Include="ElectricCar.cs" />
     <Compile Include="EngineTypes\ElectricEngine.cs" />
     <Compile Include="ElectricMotorcycle.cs" />

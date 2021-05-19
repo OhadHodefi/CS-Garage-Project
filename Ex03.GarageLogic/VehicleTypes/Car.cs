@@ -6,25 +6,25 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    public abstract class Car : Vehicle
+    public class Car : Vehicle
     {
         public enum eColors { Red = 1, Silver, White, Black }
         public enum eDoors { Two = 1, Three, Four, Five}
         private const short k_WheelNumber = 4;
+
         private eDoors m_DoorsNumber;
         private eColors m_Color;
 
-        public Car(string i_ModelName,
+        public Car(Engine i_engine,
+                   string i_ModelName,
                    string i_LicenceNumber,
-                   float i_MaxWheelPressure,
-                   string i_WheelManufacturer)
+                   Wheel i_Wheel)
         : base(i_ModelName,
                i_LicenceNumber,
                k_WheelNumber,
-               i_MaxWheelPressure,
-               i_WheelManufacturer)
-        {
-        }
+               i_Wheel,
+               i_engine)
+        {   }
 
         public eColors Color
         {
@@ -77,5 +77,7 @@ No. of doors - {2}
                       m_DoorsNumber);
             return resString.ToString();
         }
+
+        public
     }
 }

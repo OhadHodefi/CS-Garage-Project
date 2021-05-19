@@ -6,24 +6,26 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    public abstract class Motorcycle : Vehicle
+    public class Motorcycle : Vehicle
     {
         public enum eLicenseTypes { A = 1, B1, AA, BB }
         private const float k_MaxWheelPressure = 30f; // same wheel pressure for both types of motorcycles
         private const short k_WheelNumber = 2;
+        
+        private Engine m_Engine;
         private eLicenseTypes m_LicenseType;
         private int m_CubicCapacity;
 
-        public Motorcycle(string i_ModelName,
+        public Motorcycle(Engine i_Engine,
+                          string i_ModelName,
                           string i_LicenceNumber,
-                          string i_WheelManufacturer)
+                          Wheel i_Wheel)
             : base(i_ModelName,
                    i_LicenceNumber,
                    k_WheelNumber,
-                   k_MaxWheelPressure,
-                   i_WheelManufacturer)
-        {
-        }
+                   i_Wheel,
+                   i_Engine)
+        {   }
 
         public eLicenseTypes LicenseType
         {
