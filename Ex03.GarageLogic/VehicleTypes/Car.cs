@@ -78,6 +78,5 @@ No. of doors - {2}
             return resString.ToString();
         }
 
-        public
     }
 }

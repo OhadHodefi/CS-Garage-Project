@@ -73,7 +73,6 @@ Garage Manager 2021
             "vehicle's license number",
             "wheels manufacturer name",
             "vehicle's model name",
-            "Please choose the type of vehicle: ",
             "current amount of energy (gas/electricity left)",
             "current wheels pressure",
             "personal information",

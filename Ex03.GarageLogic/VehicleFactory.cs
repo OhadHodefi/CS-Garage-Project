@@ -13,14 +13,22 @@ namespace Ex03.GarageLogic
             ElectricCar,
             Truck
         }
-        public enum eEngineTypes 
-        { 
-            FuelEngineType,
-            ElectricEngineType
+
+        internal const float k_MotorcycleMaxBatteryCapacity = 108f; // 108 minutes -> 1.8 hours
+        internal const float k_MotorcycleMaxEngineCapacity = 6f; // 6 litres
+        internal const float k_CarMaxBatteryCapacity = 192f; // 192 minutes -> 3.2 hours
+        internal const float k_CarMaxEngineCapacity = 45f; // 45 litres 
+        internal const float k_TruckMaxEngineCapacity = 120f; // 120 litres
+
+
+
+        public static string[] VehicleTypes
+        {
+            get { return Enum.GetNames(typeof(eVehicleTypes)); }
         }
 
-
-        public static Vehicle MakeVehicle(eVehicleTypes i_VehicleType, eEngineTypes i_EngineType 
+        public static Vehicle MakeVehicle(
+                              eVehicleTypes i_VehicleType,  
                               string i_LicenseNumber,
                               string i_ModelName,
                               string i_WheelManufacturer)
@@ -29,32 +37,23 @@ namespace Ex03.GarageLogic
 
             switch (i_VehicleType)
             {
-                case eVehicleTypes.Motorcycle:
+                case eVehicleTypes.GasMotorcycle:
                     {
-                        switch(i_EngineType)
-                        {
-                            case eEngineTypes.FuelEngineType:
-                                {
-                                    newVehicle = new Motorcycle(new FuelEngine());
-                                    break;
-                                }
-
-                            case eEngineTypes.ElectricEngineType:
-                                {
-                                    newVehicle = new Motorcycle(new ElectricEngine());
-                                    break;
-                                }
-                        }
+                        newVehicle = new Motorcycle(
+                                    new GasEngine(GasEngine.eFuelTypes.Octan98, k_MotorcycleMaxEngineCapacity),
+                                    i_ModelName,
+                                    i_LicenseNumber,
+                                    new Wheel(i_WheelManufacturer, );
+                        break;
                     }
-                //case eVehicleTypes.GasMotorcycle:
-                //    {
-                //        newVehicle = new GasMotorcycle(i_ModelName, i_LicenseNumber, i_WheelManufacturer);
-                //        break;
-                //    }
 
                 case eVehicleTypes.ElectricMotorcycle:
                     {
-                        newVehicle = new ElectricMotorcycle(i_ModelName, i_LicenseNumber, i_WheelManufacturer);
+                        newVehicle = new Motorcycle(
+                                    new ElectricEngine(k_MotorcycleMaxBatteryCapacity),
+                                    i_ModelName,
+                                    i_LicenseNumber,
+                                    new Wheel(i_WheelManufacturer, );
                         break;
                     }
 
@@ -85,10 +84,7 @@ namespace Ex03.GarageLogic
             return newVehicle;
         }
 
-        public static string[] VehicleTypes
-        {
-            get { return Enum.GetNames(typeof(eVehicleTypes)); }
-        }
+
 
         public static void SetCarParams(Car.eDoors i_DoorNumber, Car.eColors i_CarColor, Vehicle i_Vehicle)
         {
@@ -139,18 +135,7 @@ namespace Ex03.GarageLogic
             toSet.MaxCarryingWeight = i_MaxCarryingWeight;
         }
 
-        public static StringBuilder chooseTypeOfVehicle()
-        {
-            string[] vehicleTypes = VehicleTypes;
-            StringBuilder message = new StringBuilder();
-            int choiceCount = 1;
 
-            foreach (string type in vehicleTypes)
-            {
-                message.AppendFormat(@"{0} - {1}{2}", choiceCount++, type, Environment.NewLine);
-            }
-            return message;
-        }
 
 
 

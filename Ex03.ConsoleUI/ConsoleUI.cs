@@ -31,6 +31,9 @@ namespace Ex03.ConsoleUI
                                 break;
                             }
 
+
+
+
                         case Messages.eMenuQueries.ViewLicenseNumbers:
                             {
                                 ShowLicenseNumber();
@@ -109,43 +112,49 @@ namespace Ex03.ConsoleUI
             }
         }
 
-        public static void AddVehicle()
-        {
-            string name, phoneNumber;
 
+        public static void GetPersonalInfo(out string io_Name, out string io_PhoneNumber)
+        {
+            Console.WriteLine("Please enter your name:");
+            io_Name = Console.ReadLine();
+
+            Console.WriteLine("Please enter your phone number:");
+            io_PhoneNumber = Console.ReadLine();
+            if(!int.TryParse(io_PhoneNumber, out int _))
+            {
+                throw new FormatException("Not a valid phone number");
+            }
         }
 
-        
+        public static void GetWheelInfo(out string io_ManufacturerName, out float io_CurrentPSI)
+        {
+            Console.WriteLine("Please enter wheel's manufacturer name:");
+            io_ManufacturerName = Console.ReadLine();
 
+            Console.WriteLine("Please enter current wheel's PSI:");
+            io_CurrentPSI = float.Parse(Console.ReadLine());
+        }
 
+        public static Vehicle GetVehicleInfo(
+                                out string io_modelName,
+                                out string io_licenseNumber,
+                                out string io_WheelManufacturer,
+                                out float io_WheelPSI,
+                                out float io_EnergyAmount)
+        {
+            Console.WriteLine("Please enter model name:");
+            io_modelName = Console.ReadLine();
 
+            Console.WriteLine("Please enter license number:");
+            io_licenseNumber = Console.ReadLine();
+            GetWheelInfo(out io_WheelManufacturer, out io_WheelPSI);
+            VehicleFactory.eVehicleTypes vehicleType = GetVehicleType();
 
+            Vehicle vehicle = Garage.addVehicle(io_modelName, io_licenseNumber, wheel, engine, vehicleType);
+            licenseNumber = Console.ReadLine();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            return new Vehicle(;
+        }
         public static void AddVehicle()
         {
             string name, phoneNumber, modelName, licenseNumber;
@@ -155,126 +164,22 @@ namespace Ex03.ConsoleUI
 
 
 
-            Console.WriteLine("Please enter your model name of car:");
-            phoneNumber = Console.ReadLine();
-
-            Console.WriteLine("Please enter your model name of license number:");
-            phoneNumber = Console.ReadLine();
-
-
             chooseVehiclesType();
         }
 
 
-
-
-        public static void chooseVehiclesType()
-        {
-            Console.WriteLine(@"Please enter your vehicale type:");
-            Console.WriteLine(Garage.getVehickesTyps());
-            string vehicleType = Console.ReadLine();
-
-        }
-
-        public static void ShowInputMessage(StringBuilder i_Message, string i_FirstMessage, string i_SecondMessage)
-        {
-            i_Message.Clear();
-            i_Message.AppendFormat(i_FirstMessage, i_SecondMessage);
-            Console.WriteLine(i_Message);
-        }
-
-        public static void GetPersonalInfo(out string io_Name, out string io_PhoneNumber)
-        {
-            Console.WriteLine("Please enter your name:");
-            io_Name = Console.ReadLine();
-
-            Console.WriteLine("Please enter your phone number:");
-            io_PhoneNumber = Console.ReadLine();
-        }
-
-        public static Vehicle GetVehicleInfo(out string io_modelName, out string io_licenseNumber)
-        {
-            Console.WriteLine("Please enter model name:");
-            io_modelName = Console.ReadLine();
-
-            Console.WriteLine("Please enter license number:");
-            io_licenseNumber = Console.ReadLine();
-
-            Wheel wheel = GetWheelInfo();
-
-            Console.WriteLine("Please enter vehicle type:");
-            Console.WriteLine(Garage.getVehickesTyps());
-            string vehicleType = Console.ReadLine();
-
-
-            Console.WriteLine("Please enter engine type:");
-            Console.WriteLine(Garage.getOptionOfEngine(vehicleType));
-            string engineType = Console.ReadLine();
-            Engine engine = Garage.addEngine(engineType, vehicleType);
-
-            Vehicle vehicle = Garage.addVehicle(io_modelName, io_licenseNumber, wheel, engine, vehicleType);
-
-
-            licenseNumber = Console.ReadLine();
-
-
-
-            return new Vehicle(;
-            
-        }
-
-        public static Garage.getOptionOfEngine(vehicleType);
-
-        public static Wheel GetWheelInfo()
-        {
-            string manufacturerName;
-            Console.WriteLine("Please enter manufacturer name:");
-            manufacturerName = Console.ReadLine();
-
-            Console.WriteLine("Please enter current PSI:");
-            float currentPSI = Convert.ToSingle(Console.ReadLine());
-
-            Console.WriteLine("Please enter max PSI in wheel:");
-            float maxPSI = Convert.ToSingle(Console.ReadLine());
-
-            return new Wheel(manufacturerName, maxPSI);
-        }
-
-
-
-
-        StringBuilder message = new StringBuilder(
-                                        string.Format(@"We also require your {0}.{1}", 
-                                        Messages.k_InputMessages[(int)Messages.eInputQueries.VehicleInfo],
-                                        Environment.NewLine));
-
-            Console.WriteLine(message);
-            ShowInputMessage(message,
-                            Messages.k_InputMessages[(int)Messages.eInputQueries.Request],
-                            Messages.k_InputMessages[(int)Messages.eInputQueries.EnergyAmount]);
-            io_EnergyAmount = float.Parse(Console.ReadLine());
-
-            ShowInputMessage(message,
-                            Messages.k_InputMessages[(int)Messages.eInputQueries.Request],
-                            Messages.k_InputMessages[(int)Messages.eInputQueries.WheelPressure]);
-            io_WheelPSI = float.Parse(Console.ReadLine());
-
-            ShowInputMessage(message,
-                            Messages.k_InputMessages[(int)Messages.eInputQueries.Request],
-                            Messages.k_InputMessages[(int)Messages.eInputQueries.WheelManufacturer]);
-            io_WheelManufacturer = Console.ReadLine();
-
-            ShowInputMessage(message,
-                            Messages.k_InputMessages[(int)Messages.eInputQueries.Request],
-                            Messages.k_InputMessages[(int)Messages.eInputQueries.ModelName]);
-            io_ModelName = Console.ReadLine();
-        }
-
         public static VehicleFactory.eVehicleTypes GetVehicleType()
         {
-            Console.WriteLine(Messages.k_InputMessages[(int)Messages.eInputQueries.VehicleType]);
-            Console.WriteLine(VehicleFactory.chooseTypeOfVehicle());
+            Console.WriteLine("Please choose the type of vehicle: ");
+            string[] vehicleTypes = VehicleFactory.VehicleTypes;
+            StringBuilder message = new StringBuilder();
+            int choiceCount = 1;
+            foreach (string type in vehicleTypes)
+            {
+                message.AppendFormat(@"{0} - {1}{2}", choiceCount++, type, Environment.NewLine);
+            }
 
+            Console.WriteLine(message);
             VehicleFactory.eVehicleTypes choiceType;
             if (!Enum.TryParse(Console.ReadLine(), out choiceType))
             {
@@ -289,18 +194,9 @@ namespace Ex03.ConsoleUI
 
         }
 
-        
-
-
-
         public static void ShowFullVehicleInfo(Garage i_Garage)
         {
-            StringBuilder message = new StringBuilder();
-            ShowInputMessage(
-                    message, 
-                    Messages.k_InputMessages[(int)Messages.eInputQueries.Request],
-                    Messages.k_InputMessages[(int)Messages.eInputQueries.LicenseNumber]);
-
+            Console.WriteLine("Please enter the vehicle's license number and then press 'enter': ");
             string licenseNumber = Console.ReadLine();
             Console.WriteLine(i_Garage.GetFullVehicleInfo(licenseNumber));
         }

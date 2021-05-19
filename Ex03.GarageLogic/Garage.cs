@@ -21,22 +21,10 @@ namespace Ex03.GarageLogic
         private const float k_MaxBatteryCar = 3.2f;
         private const float k_MaxBatteryMotorcycle = 1.8f;
 
-        public enum eVehiclesTyps { car=1, motorcycle, truck }
         public enum eEngineTyps { gasEngine = 1, electricEngine }
 
 
-        public static string getVehickesTyps()
-        {
-            StringBuilder resString = new StringBuilder();
-            int i = 1;
-            foreach (string s in Enum.GetNames(typeof(eVehiclesTyps)))
-            {
-                resString.AppendFormat(@"{0} - {1}
-", i, s);
-                i++;
-            }
-            return resString.ToString();
-        }
+
 
         public static string getOptionOfEngine(string i_vehicleType)
         {

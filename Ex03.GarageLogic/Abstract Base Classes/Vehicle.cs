@@ -48,20 +48,21 @@ namespace Ex03.GarageLogic
         //{
         //    get;
         //}
- 
-        //public float EnergyRemaining
-        //{
-        //    get { return m_PercentageEnergyRemaining; }
-        //    set 
-        //    {   
-        //        if(value > 100 || value < 0)
-        //        {
-        //            throw new ValueOutOfRangeException(0 ,100, "Vehicle");
-        //        }
 
-        //        m_PercentageEnergyRemaining = value;
-        //    }
-        //}
+        public float EnergyRemaining
+        {
+            get { return m_PercentageEnergyRemaining; }
+            set
+            {
+                if (value > 100 || value < 0)
+                {
+                    throw new ValueOutOfRangeException(0, 100, "Vehicle");
+                }
+
+                m_PercentageEnergyRemaining = value;
+            }
+        }
+
 
         public abstract object[] GetParams();
 

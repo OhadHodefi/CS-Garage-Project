@@ -34,7 +34,6 @@ namespace Ex03.GarageLogic
             get { return m_MaxAirPressure; }
         }
 
-        //??? why we need it?
         public bool IsEmptyPressure
         {
             get { return m_CurrentAirPressure == 0; }

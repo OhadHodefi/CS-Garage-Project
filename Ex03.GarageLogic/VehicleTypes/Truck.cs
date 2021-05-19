@@ -10,7 +10,6 @@ namespace Ex03.GarageLogic
     {
         private const short k_WheelNumber = 16;
         private const float k_WheelPressure = 26f;
-        private const float k_MaxEngineCapacity = 120f;
         private bool m_IsTransportHazardousMaterials;
         private float m_MaxCarryingWeight;
         private GasEngine m_Engine;
@@ -32,10 +31,10 @@ namespace Ex03.GarageLogic
             set { IsTransportHazardousMaterials = value; }
         }
 
-        //public GasEngine.eFuelTypes FuelType
-        //{
-        //    get { return m_Engine.FuelType; }
-        //}
+        public GasEngine.eFuelTypes FuelType
+        {
+            get { return m_Engine.FuelType; }
+        }
 
         public float MaxCarryingWeight
         {
@@ -43,20 +42,17 @@ namespace Ex03.GarageLogic
             set { m_MaxCarryingWeight = value; }
         }
 
-        //public float CurrentFuel
-        //{
-        //    get { return m_Engine.CurrentCapacity; }
-        //}
+        public float CurrentFuel
+        {
+            get { return m_Engine.CurrentCapacity; }
+        }
 
-        //public float MaxFuel
-        //{
-        //    get { return m_Engine.MaxCapacity; }
-        //}
+        public float MaxFuel
+        {
+            get { return m_Engine.MaxCapacity; }
+        }
 
-        //public override Engine Engine
-        //{
-        //    get { return m_Engine; }
-        //}
+
 
         //        public override string GetParams()
         //        {
